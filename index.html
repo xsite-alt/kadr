@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
 <!-- АДМИН-ПАНЕЛЬ: впишите свою почту между кавычками после content=, например content="me@mail.ru". Несколько почт через запятую. Кавычки не удаляйте. -->
 <meta name="admin-email" content="bogdanpexno@gmail.com">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -601,6 +602,14 @@ main:focus{outline:none}
 .guest-lock .gl-i{font-size:2rem;line-height:1}.guest-lock p{max-width:420px;margin:0}
 #guestDlg{width:min(440px,92vw)}
 @media (max-width:640px){#guestBar{font-size:.82rem;padding:7px 8px 7px 12px;flex-wrap:nowrap}#guestBar .gb-l{display:none}#guestBar button{padding:6px 12px;min-height:34px;flex:none}}
+/* встроенный плеер (только для авторизованных) */
+#plBox{margin-top:14px;background:var(--field);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.pl-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--paper)}
+.pl-tabs button{padding:5px 12px;font-size:.82rem;border-radius:999px;background:none;color:var(--mut)}
+.pl-tabs button.on{background:var(--acc);color:var(--on-acc);border-color:var(--acc);font-weight:600}
+.pl-tabs .pl-x{margin-left:auto;border:0;padding:4px 10px}
+#plFrame{width:100%;aspect-ratio:16/9;background:#000}
+#plFrame iframe{width:100%;height:100%;border:0;display:block}
 </style>
 </head>
 <body>
@@ -2033,6 +2042,9 @@ function extLinks(f, ftitle, fdate, tv) {
   const L = [];
   if (imdb) L.push(`<a class="ext" href="https://www.imdb.com/title/${encodeURIComponent(imdb)}/" target="_blank" rel="noopener">IMDb ↗</a>`);
   L.push(`<a class="ext" href="https://www.kinopoisk.ru/index.php?kp_query=${q}" target="_blank" rel="noopener" title="Поиск на Кинопоиске (может не открываться без VPN)">Кинопоиск ↗</a>`);
+  if (!isGuest) {
+    L.push(`<a class="ext" href="https://www.google.com/search?q=${encodeURIComponent(ftitle + (y ? " " + y : "") + " смотреть онлайн")}" target="_blank" rel="noopener">Смотреть онлайн ↗</a>`);
+  }
   return `<div class="exts">${L.join("")}</div>`;
 }
 
@@ -2353,14 +2365,15 @@ async function openMovie(tid, mt = "movie") {
       ${f.tagline ? `<p class="tag">${esc(f.tagline)}</p>` : ""}
       <p>${esc(f.overview || "Описания пока нет.")}</p>
       ${dir ? `<p class="meta">${tv ? "Создатели" : "Режиссёр"}: ${esc(dir)}</p>` : ""}${cast ? `<p class="meta">В ролях: ${esc(cast)}</p>` : ""}
-      ${mine}${prog}<div id="frEp"></div><div class="acts" style="margin-top:12px">${acts}${tvp}${ignB}${vid ? `<button data-a="tr" data-k="${esc(vid.key)}">Трейлер</button>` : ""}</div>
-      <div id="tr"></div></div></div>
+      ${mine}${prog}<div id="frEp"></div><div class="acts" style="margin-top:12px">${acts}${!isGuest ? `<button data-a="watch">▶ Смотреть</button>` : ""}${tvp}${ignB}${vid ? `<button data-a="tr" data-k="${esc(vid.key)}">Трейлер</button>` : ""}</div>
+      <div id="plBox" hidden></div><div id="tr"></div></div></div>
     ${sim.length ? `<h3>Похожие фильмы</h3><div class="sim">${sim.map(x => `<button class="tile" data-sim="${x.id}" title="${esc(x.title || x.name)}"><img src="${IMG}${x.poster_path}" alt="${esc(x.title || x.name)}" loading="lazy" decoding="async"></button>`).join("")}</div>` : ""}<div id="dirRow"></div>`;
   body.dataset.cur = tid + "-" + mt; dirLoad(f, tid, mt, tv); fillFrEp(tid, tv, m);
   body.onclick = async e => {
     const sm = e.target.closest("[data-sim]"); if (sm) return openMovie(+sm.dataset.sim, mt);
     const a = e.target.dataset.a; if (!a) return;
     if (a === "tr") { $("#tr").innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(e.target.dataset.k)}?autoplay=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`; return; }
+    if (a === "watch") { watchOpen(f, tid, tv, m); return; }
     if (a === "ign" || a === "unign") { a === "ign" ? ignSet().add(tid + "-" + mt) : ignSet().delete(tid + "-" + mt); ignSave(); toast(a === "ign" ? "Скрыто из рекомендаций" : "Возвращено в рекомендации"); if (a === "ign") return $("#mv").close(); }
     else if (a === "ep1" || a === "epset") {
       let s = m.season || 1, n = (m.episode || 0) + 1;
@@ -2381,6 +2394,43 @@ async function openMovie(tid, mt = "movie") {
     }
     openMovie(tid, mt);
   };
+}
+
+/* ---------- встроенный плеер (только для авторизованных) ---------- */
+function watchOpen(f, tid, tv, m) {
+  const box = $("#plBox"); if (!box || isGuest) return;
+  if (!box.hidden) { box.hidden = true; box.innerHTML = ""; return; }
+  const imdb = f.imdb_id || (f.external_ids || {}).imdb_id || "";
+  const title = f.title || f.name || "";
+  const s = (m && m.season) || 1, ep = (m && m.episode) || 1;
+  box.hidden = false;
+  box.innerHTML = `<div class="pl-tabs"><button type="button" data-p="ru" class="on">На русском</button><button type="button" data-p="en1">Оригинал</button><button type="button" data-p="en2">Оригинал 2</button><button type="button" class="pl-x" data-p="x" aria-label="Закрыть плеер">✕</button></div><div id="plFrame"></div>`;
+  const frame = $("#plFrame");
+  const show = p => {
+    if (p === "x") { box.hidden = true; box.innerHTML = ""; return; }
+    box.querySelectorAll("[data-p]").forEach(b => b.classList.toggle("on", b.dataset.p === p));
+    if (p === "ru") {
+      frame.innerHTML = `<div class="kinobox_player" style="width:100%;height:100%"></div>`;
+      const run = () => {
+        try { window.kbox(frame.firstChild, { search: imdb ? { imdb } : { title }, menu: { default: "menu_list", mobile: "menu_button", enabled: true } }); }
+        catch (e) { frame.innerHTML = `<div class="meta" style="padding:24px;text-align:center">Плеер не запустился. Попробуйте вкладку «Оригинал» или ссылку «Смотреть онлайн ↗» выше.</div>`; }
+      };
+      if (window.kbox) return run();
+      const sc = document.createElement("script"); sc.src = "https://kinobox.tv/kinobox.min.js";
+      sc.onload = run;
+      sc.onerror = () => { frame.innerHTML = `<div class="meta" style="padding:24px;text-align:center">Не удалось загрузить плеер (возможно, мешает AdBlock или блокировка провайдера).</div>`; };
+      document.head.appendChild(sc);
+    } else if (p === "en1") {
+      const url = tv ? `https://vidsrc.cc/v2/embed/tv/${tid}/${s}/${ep}` : `https://vidsrc.cc/v2/embed/movie/${tid}`;
+      frame.innerHTML = `<iframe src="${url}" allowfullscreen referrerpolicy="origin"></iframe>`;
+    } else if (p === "en2") {
+      const url = tv ? `https://vidsrc.me/embed/tv?tmdb=${tid}&season=${s}&episode=${ep}` : `https://vidsrc.me/embed/movie?tmdb=${tid}`;
+      frame.innerHTML = `<iframe src="${url}" allowfullscreen referrerpolicy="origin"></iframe>`;
+    }
+  };
+  box.querySelector(".pl-tabs").onclick = e => { const b = e.target.closest("[data-p]"); if (b) show(b.dataset.p); };
+  show("ru");
+  box.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 /* ---------- общее для фильмов и сериалов ---------- */
