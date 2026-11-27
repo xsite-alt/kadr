@@ -75,6 +75,7 @@ input:focus,select:focus,textarea:focus{outline:none;}
 .tile:hover,.tile:focus-visible{transform:scale(1.04);z-index:3;}
 .tile img{width:100%;height:100%;object-fit:cover;display:block}
 .tile .noimg{width:100%;height:100%;padding:10px;font-size:.9rem}
+.noimg.cv{flex-direction:column;gap:6px;position:relative;overflow:hidden;color:#f2f2f4;background:linear-gradient(160deg,hsl(var(--h) 50% 30%),hsl(calc(var(--h) + 45) 55% 11%))}.noimg.cv::before{content:"";position:absolute;inset:0;background:radial-gradient(90% 60% at 20% 0,#ffffff26,#0000),repeating-linear-gradient(#0000 0 14px,#0000003a 14px 16px)}.noimg.cv b,.noimg.cv small{position:relative;text-shadow:0 1px 6px #0009}.noimg.cv b{font-family:var(--disp);font-weight:600;font-size:1rem;line-height:1.2;letter-spacing:.01em}.noimg.cv small{opacity:.75;font-size:.74rem}.noimg.cv i{position:relative;font-style:normal;font-size:1.5rem;opacity:.9}
 .tile .ov{position:absolute;inset:auto 0 0;background:linear-gradient(transparent,#000e);color:#fff;font-size:.82rem;font-weight:600;text-align:left;opacity:0;transition:opacity .15s}
 .tile:hover .ov,.tile:focus-visible .ov{opacity:1}
 .tile .ov i{opacity:.7;font-style:normal;font-weight:400}
@@ -645,6 +646,46 @@ main:focus{outline:none}
 .guest-lock .gl-i{font-size:2rem;line-height:1}.guest-lock p{max-width:420px;margin:0}
 #guestDlg{width:min(440px,92vw)}
 @media (max-width:640px){#guestBar{font-size:.82rem;padding:7px 8px 7px 12px;flex-wrap:nowrap}#guestBar .gb-l{display:none}#guestBar button{padding:6px 12px;min-height:34px;flex:none}}
+
+/* вход: кинозал с проектором */
+#auth{position:relative;max-width:none;margin:0;min-height:100vh;min-height:100svh;display:grid;place-items:center;padding:24px 0;overflow:hidden}
+.abg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(120% 70% at 50% 115%,#f5b04120,transparent 60%),var(--bg)}
+.abg .beam{position:absolute;left:50%;top:-8%;width:150vmax;height:150vmax;margin-left:-75vmax;transform-origin:50% 0;background:conic-gradient(from 166deg at 50% 0,transparent 0,#f5b04128 5deg,#f5b0410d 12deg,transparent 19deg);animation:beam 9s ease-in-out infinite alternate}
+@keyframes beam{from{transform:rotate(-8deg);opacity:.65}to{transform:rotate(8deg);opacity:1}}
+.abg .st{position:absolute;top:0;width:96px;height:100%;overflow:hidden;opacity:.7;-webkit-mask-image:linear-gradient(transparent,#000 20%,#000 80%,transparent);mask-image:linear-gradient(transparent,#000 20%,#000 80%,transparent)}
+.abg .st i{position:absolute;left:0;right:0;top:0;height:calc(100% + 136px);animation:stp var(--d,8s) linear infinite var(--r,normal);background:repeating-linear-gradient(#0000 0 8px,var(--c) 8px 128px,#0000 128px 136px) 50% 0/calc(100% - 30px) 100% no-repeat,repeating-linear-gradient(#fff3 0 12px,#0000 12px 34px) 4px 0/8px 100% no-repeat,repeating-linear-gradient(#fff3 0 12px,#0000 12px 34px) right 4px top 0/8px 100% no-repeat}
+@keyframes stp{to{transform:translateY(-136px)}}
+.abg .dust{position:absolute;inset:0;opacity:.8;background-image:radial-gradient(1.5px 1.5px at 20% 30%,#f5b041aa,#0000),radial-gradient(1px 1px at 70% 60%,#fff7,#0000),radial-gradient(1.5px 1.5px at 45% 80%,#f5b04188,#0000),radial-gradient(1px 1px at 85% 20%,#fff6,#0000);background-size:340px 340px;animation:dust 45s linear infinite}
+@keyframes dust{to{background-position:0 -340px}}
+.acard{position:relative;z-index:1;width:min(380px,92vw);display:grid;gap:12px;padding:28px 26px 22px;border:1px solid var(--line);border-radius:22px;background:color-mix(in srgb,var(--paper) 80%,transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 30px 80px #0008;animation:acIn .7s cubic-bezier(.2,.8,.2,1) both}
+@keyframes acIn{from{opacity:0;transform:translateY(18px) scale(.98)}}
+.acard .tag2{min-height:1.3em;margin:0;text-align:center;transition:opacity .35s}
+#auth #msg:empty{display:none}
+.feat{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}.feat span{font-size:.74rem;color:var(--mut);padding:4px 9px;border:1px solid var(--line);border-radius:99px}
+#auth .pwbox{position:relative}#auth .pwbox input{padding-right:46px}#auth .pwbox button{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:38px;min-height:0;padding:6px;background:none;border:0}
+@media(max-width:700px){.abg .st{width:64px}.abg .st:nth-child(3),.abg .st:nth-child(5){display:none}}
+@media(prefers-reduced-motion:reduce){.abg *,.acard{animation:none!important}}
+/* экскурсия */
+#tour{position:fixed;inset:0;z-index:9000}#tour[hidden]{display:none}
+.tr-hl{position:fixed;border-radius:14px;box-shadow:0 0 0 9999px #000b,0 0 0 2px var(--acc),0 0 24px #f5b04166;transition:all .35s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.tr-card{position:fixed;width:min(340px,92vw);padding:16px 16px 12px;border-radius:16px;background:var(--paper);border:1px solid var(--acc);box-shadow:0 20px 60px #000a;color:var(--tx);transition:top .35s,left .35s}
+.tr-card h4{margin:0 0 6px;font-size:1.05rem}.tr-card p{margin:0 0 12px;font-size:.9rem;line-height:1.45;color:var(--mut)}
+.tr-f{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.tr-f span{margin-right:auto;font-size:.78rem;color:var(--mut)}.tr-f button{padding:7px 14px;min-height:36px}
+.tr-dots{display:flex;gap:4px;margin-bottom:10px}.tr-dots i{height:3px;flex:1;border-radius:2px;background:var(--line)}.tr-dots i.on{background:var(--acc)}
+#guestBar .gb-b{display:flex;gap:8px}
+@media(max-width:640px){#guestBar>span:first-child{flex:1;min-width:0;font-size:.76rem;line-height:1.25}#guestBar .gb-b{gap:6px}#guestBar .gb-b button{padding:6px 10px;font-size:.78rem}}
+/* пасхалки */
+.proj{position:fixed;inset:0;z-index:9500;pointer-events:none;background:#fff;animation:proj 1.2s steps(1,end) both}
+@keyframes proj{0%{opacity:.9}10%{opacity:0}20%{opacity:.7}30%{opacity:.05}45%{opacity:.5}60%{opacity:0}75%{opacity:.25}100%{opacity:0}}
+.credits{position:fixed;inset:0;z-index:9400;background:#000e;color:#f2f2f4;overflow:hidden;display:grid;place-items:center;text-align:center}
+.cr-in{animation:crl 18s linear forwards}@keyframes crl{from{transform:translateY(70vh)}to{transform:translateY(-70vh)}}
+.cr-in p{margin:0 0 26px;font-size:1.1rem;letter-spacing:.04em}.cr-in b{font-family:var(--disp);font-size:2rem;display:block;margin-bottom:30px;color:#f5b041}.credits small{position:absolute;bottom:18px;left:0;right:0;color:#8a8a96}
+#mvBody img.flip2{animation:flip2 .9s ease both;transform-origin:top}@keyframes flip2{0%{transform:perspective(600px) rotateX(0)}45%{transform:perspective(600px) rotateX(-80deg)}60%{transform:perspective(600px) rotateX(8deg)}100%{transform:none}}
+.bday .logo{position:relative}.bday .logo::before{content:"";position:absolute;left:-3px;top:-15px;width:20px;height:22px;background:repeating-linear-gradient(135deg,#f5b041 0 5px,#e8483f 5px 10px);clip-path:polygon(50% 0,100% 100%,0 100%);transform:rotate(-14deg);z-index:2}
+/* достижения: закреплённые, редкость, лента друзей */
+.ac{position:relative}.pin{position:absolute;top:6px;right:6px;width:30px;height:30px;min-height:0;padding:0;border-radius:50%;border:0;background:none;opacity:.5}.pin:hover,.pin.on{opacity:1}.pin.on{background:var(--glass)}
+.pins{display:inline-flex;gap:4px;margin-left:10px;vertical-align:middle}.pins i{font-style:normal;font-size:.9rem;width:26px;height:26px;display:grid;place-items:center;border-radius:50%;border:1.5px solid #c98a52;background:var(--glass)}.pins i.t2{border-color:#b8c0cc}.pins i.t3{border-color:#f5b041}
+.fg-box{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}.fg-box span{padding:7px 12px;border:1px solid var(--acc);border-radius:99px;font-size:.84rem;background:var(--glass)}
 </style>
 </head>
 <body>
@@ -652,18 +693,22 @@ main:focus{outline:none}
 <main tabindex="-1">
 
 <section id="auth" hidden>
+  <div class="abg" aria-hidden="true"><div class="beam"></div><div class="st" style="left:4vw;--c:#f5b04128;--d:7s"><i></i></div><div class="st" style="left:15vw;--c:#4fd1c522;--d:11s;--r:reverse"><i></i></div><div class="st" style="right:4vw;--c:#e8607a22;--d:9s;--r:reverse"><i></i></div><div class="st" style="right:15vw;--c:#f5b0411f;--d:13s"><i></i></div><div class="dust"></div></div>
+  <div class="acard">
   <div class="logo"><svg class="mk" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16"/><path d="M16 24.5V16h8.5M39.5 16H48v8.5M48 39.5V48h-8.5M24.5 48H16v-8.5"/><path class="pl" d="M28.2 24.8c0-1.4 1.5-2.2 2.7-1.5l10.8 7.2c1.1.8 1.1 2.3 0 3l-10.8 7.2c-1.2.8-2.7-.1-2.7-1.5z"/></svg><b>Поиск кадров</b></div>
   <p class="tag2">Личный список фильмов</p>
+  <div class="feat"><span>★ Оценки 1–10</span><span>🎞 Списки и заметки</span><span>🏆 Достижения</span><span>👥 Друзья</span></div>
   <input id="em" type="email" placeholder="Эл. почта" autocomplete="email">
-  <input id="pw" type="password" placeholder="Пароль (от 6 символов)" autocomplete="current-password">
+  <div class="pwbox"><input id="pw" type="password" placeholder="Пароль (от 6 символов)" autocomplete="current-password"><button type="button" id="pwEye" aria-label="Показать пароль">👁</button></div>
   <button class="main" onclick="authGo('in')">Войти</button>
   <button onclick="authGo('up')">Зарегистрироваться</button>
   <div id="msg"></div>
-  <div class="guest-go"><span>или</span><button type="button" onclick="guestGo()">Зайти как гость</button><small>Посмотреть сайт на примере списка, без регистрации</small></div>
+  <div class="guest-go"><span>или</span><button type="button" onclick="guestGo()">🧭 Зайти как гость с экскурсией</button><small>Посмотреть сайт на примере списка, без регистрации</small></div>
+  </div>
 </section>
 
 <section id="app" hidden>
-  <div id="guestBar" hidden><span><b>Гостевой режим</b> · пример списка<span class="gb-l">. Свой список, оценки, профиль и друзья откроются после регистрации</span></span><button class="main" type="button" onclick="guestExit(true)">Зарегистрироваться</button></div>
+  <div id="guestBar" hidden><span><b>Гостевой режим</b> · пример списка<span class="gb-l">. Свой список, оценки, профиль и друзья откроются после регистрации</span></span><span class="gb-b"><button type="button" onclick="tourStart()">🧭 Экскурсия</button><button class="main" type="button" onclick="guestExit(true)">Зарегистрироваться</button></span></div>
   <div class="top">
   <header>
     <div class="logo" id="logoHome" title="На главную" role="link" tabindex="0"><svg class="mk" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16"/><path d="M16 24.5V16h8.5M39.5 16H48v8.5M48 39.5V48h-8.5M24.5 48H16v-8.5"/><path class="pl" d="M28.2 24.8c0-1.4 1.5-2.2 2.7-1.5l10.8 7.2c1.1.8 1.1 2.3 0 3l-10.8 7.2c-1.2.8-2.7-.1-2.7-1.5z"/></svg><b>Поиск кадров</b></div>
@@ -884,12 +929,15 @@ function guestGo() {
   $("#auth").hidden = true; $("#app").hidden = false; $("#guestBar").hidden = false;
   userEmail = ""; userId = "guest"; profile = { display_name: "Гость", bio: "Это пример профиля. После регистрации здесь будет ваше имя, аватар и баннер." };
   movies = []; animNext = true; friends = []; friendsLoaded = true;
-  load().then(guestEnrich);
+  const ob = document.querySelector("#meMenu [data-m=out]"); if (ob) ob.textContent = "Выйти из гостевого режима";
+  load().then(() => { guestEnrich(); let seen = 0; try { seen = localStorage.getItem("tour"); } catch (e) {} if (!seen) setTimeout(tourStart, 700); });
 }
 function guestOff() {
   isGuest = false; demoEnriched = false; document.body.classList.remove("is-guest"); $("#guestBar").hidden = true;
   try { localStorage.removeItem("guest"); localStorage.removeItem("mvc:guest"); } catch (e) {}
   friends = []; friendsLoaded = false;
+  const ob = document.querySelector("#meMenu [data-m=out]"); if (ob) ob.textContent = "Выйти";
+  if (typeof tourEnd === "function") tourEnd(true);
 }
 function guestExit(reg) {
   guestOff(); movies = []; profile = {}; userId = "";
@@ -935,7 +983,7 @@ function filtered() {
 }
 
 function row(m, i) {
-  const img = m.poster ? `<img src="${IMG}${esc(m.poster)}" alt="" loading="lazy" decoding="async">` : `<div class="noimg"></div>`;
+  const img = m.poster ? `<img src="${IMG}${esc(m.poster)}" alt="" loading="lazy" decoding="async">` : cover(m);
   const info = [m.media_type === "tv" ? "сериал" : "", m.runtime ? m.runtime + (m.media_type === "tv" ? " мин/серия" : " мин") : "", esc(m.genres)].filter(Boolean).join(", ");
   return `<article class="card" data-tid="${m.tmdb_id}" data-mt="${m.media_type || "movie"}" style="--i:${i}">${img}<div class="body">
     <h2>${esc(m.title)} <span class="meta">${esc(m.year)}</span></h2>
@@ -946,7 +994,7 @@ function row(m, i) {
   </div></article>`;
 }
 function tile(m, i) {
-  const img = m.poster ? `<img src="${IMG}${esc(m.poster)}" alt="${esc(m.title)}" loading="lazy" decoding="async">` : `<div class="noimg">${esc(m.title)}</div>`;
+  const img = m.poster ? `<img src="${IMG}${esc(m.poster)}" alt="${esc(m.title)}" loading="lazy" decoding="async">` : cover(m);
   const r = m.my_rating, tier = r >= 9 ? "hi" : r >= 7 ? "mid" : "lo";
   const badge = m.status === "watched" ? (r ? `<b class="rt ${tier}">★ ${r}</b>` : `<b class="rt">✓</b>`) : (+m.tmdb_rating ? `<span class="rt tm">TMDB ${(+m.tmdb_rating).toFixed(1)}</span>` : "");
   return `<button class="tile" data-tid="${m.tmdb_id}" data-mt="${m.media_type || "movie"}" style="--i:${i}" title="${esc(m.title)}">${img}${m.media_type === "tv" ? `<span class="tv">Сериал</span>` : ""}<span class="ov">${esc(m.title)} <i>${esc(m.year)}</i></span><span class="bd">${badge}</span></button>`;
@@ -1204,6 +1252,7 @@ async function loadFriends() {
     P = p.data || []; M = m.data || [];
   }
   friends = ids.map(id => friendData[id] = { id, profile: P.find(x => x.user_id === id) || {}, movies: M.filter(x => x.user_id === id) });
+  try { const fk = "frs:" + userId, od = JSON.parse(localStorage.getItem(fk) || "null"); if (od && ids.some(i => !od.includes(i)) && Date.now() - (window.__myAdd || 0) > 15000) act("warm", 1, true); localStorage.setItem(fk, JSON.stringify(ids)); frGoldScan(); } catch (e) {}
   const cb = document.getElementById("contBox"); if (cb && typeof contHtml === "function") cb.innerHTML = contHtml();
 }
 function compare(f) {
@@ -1278,7 +1327,7 @@ const frClick = async e => {
   if (b.dataset.fo) return showFriend(b.dataset.fo);
   if (b.id === "frAdd") {
     const code = $("#frIn").value.trim(); if (!code) return;
-    const { data, error } = await sb.rpc("add_friend", { code });
+    window.__myAdd = Date.now(); const { data, error } = await sb.rpc("add_friend", { code });
     if (error) return toast(error.message);
     toast("Друг добавлен" + (data ? ": " + data : "")); friendsLoaded = false; return renderFriends();
   }
@@ -1399,7 +1448,7 @@ async function loadEps(tok) {
 
 
 /* ---------- лента друзей, сравнение вкусов, резервная копия, установка ---------- */
-async function loadFeed(tok) {
+async function loadFeed0(tok) {
   if (!friendsLoaded) await loadFriends();
   if (tok !== homeTok || !$("#feedBox") || !friends || !friends.length) return;
   const dt = x => x.watched_at || (x.created_at || "").slice(0, 10);
@@ -1416,7 +1465,7 @@ function diffHtml(f) {
   return `<div class="pf-sec cols"><div class="panel"><h3>Оба в восторге</h3>${love.length ? love.map(row).join("") : `<div class="meta">Пока нет общих фильмов с оценкой 9–10.</div>`}</div><div class="panel"><h3>Больше всего разошлись</h3>${diff.length ? diff.map(row).join("") : `<div class="meta">Оценки близки, разногласий нет.</div>`}</div></div>`;
 }
 function exportCsv() {
-  if (!movies.length) return toast("Список пока пуст");
+  if (!movies.length) return toast("Список пока пуст"); act("bk");
   const q = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
   const head = ["name_rus", "name_eng", "rating", "date", "status", "type", "tmdb_id", "tmdb_rating", "runtime", "genres", "note"];
   const rows = movies.map(m => [`${m.title} (${m.media_type === "tv" ? "сериал, " : ""}${m.year || ""})`, "", m.my_rating, m.watched_at, m.status, m.media_type || "movie", m.tmdb_id, m.tmdb_rating, m.runtime, m.genres, m.note].map(q).join(","));
@@ -1444,12 +1493,13 @@ $("#selBar").onclick = async e => {
   const ms = movies.filter(m => selSet.has(keyOf(m))); if (!ms.length) return toast("Ничего не выбрано");
   const ids = ms.map(m => m.id); let err = null;
   if (a === "del") { if (!confirm("Удалить выбранное (" + ms.length + ")?")) return; err = (await sb.from("movies").delete().in("id", ids)).error; }
-  else if (a === "seen") err = (await sb.from("movies").update({ status: "watched", watched_at: today() }).in("id", ids)).error;
+  else if (a === "seen") err = (act("gs", movies.filter(m => ids.includes(m.id) && m.status === "watchlist").length), await sb.from("movies").update({ status: "watched", watched_at: today() }).in("id", ids)).error;
   else if (a === "want") { if (!confirm("Вернуть в «Хочу»? Оценки и даты просмотра будут сброшены.")) return; err = (await sb.from("movies").update({ status: "watchlist", my_rating: null, watched_at: null }).in("id", ids)).error; }
   else if (a === "rate") {
     for (const m of ms) {
       const r = await rateDialog(m.title, m.my_rating, m.note, (m.date_guess ? "" : m.watched_at) || (m.status === "watchlist" ? today() : ""));
       if (!r) break;
+      if (m.my_rating && m.my_rating !== r.rating) act("re"); if (m.status === "watchlist") act("gs");
       const x = await sb.from("movies").update({ status: "watched", my_rating: r.rating, note: r.note, ...dPatch(m, r) }).eq("id", m.id);
       if (x.error) { err = x.error; break; }
     }
@@ -1766,7 +1816,7 @@ async function doSearch() {
 function foundCards(list) {
   return list.map(f => {
     const mt = f.media_type, have = movies.find(m => m.tmdb_id === f.id && (m.media_type || "movie") === mt);
-    const img = f.poster_path ? `<img src="${IMG}${f.poster_path}" alt="" loading="lazy" decoding="async">` : `<div class="noimg"></div>`;
+    const img = f.poster_path ? `<img src="${IMG}${f.poster_path}" alt="" loading="lazy" decoding="async">` : cover({ title: f.title || f.name, year: (f.release_date || f.first_air_date || "").slice(0, 4), media_type: f.media_type });
     return `<article class="card" data-tid="${f.id}" data-mt="${mt}">${img}<div class="body">
       <h2>${esc(f.title || f.name)}</h2>
       <div class="meta">${mt === "tv" ? "Сериал, " : ""}${esc((f.release_date || f.first_air_date || "").slice(0, 4))}${f.vote_average ? ", TMDB " + f.vote_average.toFixed(1) : ""}</div>
@@ -1805,8 +1855,10 @@ async function addMovie(tid, status, mt = "movie") {
   try { d = await (await fetch(`https://api.themoviedb.org/3/${mt}/${tid}?api_key=${TMDB_KEY}&language=ru-RU`)).json(); }
   catch (err) { toast("Не удалось получить данные о фильме."); return false; }
   const row = { ...mediaRow(d, tid, mt), status, my_rating: my, note, watched_at: dt };
+  const old = movies.find(x => x.tmdb_id === tid && (x.media_type || "movie") === mt);
   const { error } = await sb.from("movies").upsert(row, { onConflict: "user_id,tmdb_id,media_type" });
   if (error) { toast(error.message + ". Выполнили SQL из migration_series.sql?"); return false; }
+  if (status === "watchlist" && !old) act("hk:" + today()); else if (status === "watched" && old && old.status === "watchlist") act("gs");
   await load(); toast("Добавлено: " + row.title); return true;
 }
 $("#found").onclick = async e => { const c = e.target.closest("[data-tid]"); if (c && e.target.closest("img,h2")) return openMovie(+c.dataset.tid, c.dataset.mt); const s = e.target.dataset.s; if (s && await addMovie(+e.target.dataset.id, s, e.target.dataset.mt)) { if ($("#q").value.trim() && found.length) doSearch(); else searchIdle(); } };
@@ -2021,7 +2073,7 @@ function renderProfile() {
     <div class="pf-banner" style="${bn}"><button id="pfBn">Сменить баннер</button></div>
     <div class="pf-head">
       <button class="pf-av" id="pfAv" style="${av}" aria-label="Сменить аватар">${profile.avatar_url ? "" : esc(name[0].toUpperCase())}<span>Изменить</span></button>
-      <div class="pf-name"><h2>${esc(name)}</h2><div class="meta">${esc(userEmail)}</div></div>
+      <div class="pf-name"><h2>${esc(name)}${pinsHtml()}</h2><div class="meta">${esc(userEmail)}</div></div>
       <button id="pfEdit">Редактировать</button>
     </div>
     <p class="pf-bio ${profile.bio ? "" : "none"}">${profile.bio ? esc(profile.bio) : "Расскажите о себе: нажмите «Редактировать»."}</p>
@@ -2088,14 +2140,20 @@ function extLinks(f, ftitle, fdate, tv) {
 
 /* ---------- достижения (считаются из списка, без базы) + пасхалки ---------- */
 const EGGS = [
-  { id: "logo", i: "🎬", n: "Чё такое?", h: "логотип не любит, когда его теребят" },
+  { id: "logo", i: "🎬", n: "Настойчивый палец", h: "логотип не любит, когда его теребят" },
   { id: "konami", i: "🎮", n: "Старая школа", h: "код из восьмидесятых: стрелки и две буквы" },
   { id: "popcorn", i: "🍿", n: "Попкорн готов", h: "напечатайте то, без чего кино не кино (английская раскладка, не в поле ввода)" },
   { id: "matrix", i: "💊", n: "Красная таблетка", h: "назовите на клавиатуре фильм про Нео" },
   { id: "night", i: "🌙", n: "Три часа ночи", h: "загляните сюда, когда все спят" },
-  { id: "trophy", i: "🏆", n: "Полировщик", h: "кубок во вкладке достижений любит внимание" }
+  { id: "trophy", i: "🏆", n: "Полировщик", h: "кубок во вкладке достижений любит внимание" },
+  { id: "rain", i: "🌧️", n: "Киноманская", h: "средняя оценка в шапке профиля любит внимание" },
+  { id: "dark", i: "🌓", n: "Тёмная сторона", h: "тема не может определиться: помогите ей, быстро и много раз" },
+  { id: "credits", i: "🎞", n: "Титры", h: "посидите на сайте минуту, не трогая мышь" },
+  { id: "rule", i: "🥊", n: "Первое правило", h: "найдите в поиске фильм, о котором не говорят" },
+  { id: "take2", i: "🎬", n: "Дубль два", h: "постер в окне фильма умеет хлопать, как хлопушка" },
+  { id: "bday", i: "🎂", n: "День рождения сайта", h: "раз в год на логотипе появляется праздничная шапка" }
 ];
-const EGG_FX = { logo: ["🎬🎥📽️🎞️", "", 36], konami: ["🎮👾🕹️⭐", "", 40], popcorn: ["🍿", "", 44], matrix: ["01ｱｲｳｴｵ", "mx", 70], night: ["🌙⭐✨", "", 34], trophy: ["🏆✨🥇", "", 36] };
+const EGG_FX = { logo: ["🎬🎥📽️🎞️", "", 36], konami: ["🎮👾🕹️⭐", "", 40], popcorn: ["🍿", "", 44], matrix: ["01ｱｲｳｴｵ", "mx", 70], night: ["🌙⭐✨", "", 34], trophy: ["🏆✨🥇", "", 36], rain: ["①②③④⑤⑥⑦⑧⑨⑩", "", 36], rule: ["🥊🤐", "", 22], take2: ["🎬", "", 18], bday: ["🎂🎉🎈", "", 44] };
 const eggKey = () => "egg:" + (userId || "guest");
 function eggSet() { try { return new Set(JSON.parse(localStorage.getItem(eggKey()) || "[]")); } catch (e) { return new Set(); } }
 function eggFx(id) {
@@ -2129,8 +2187,8 @@ document.addEventListener("click", e => {
 });
 setTimeout(() => { try { if (new Date().getHours() === 3) eggFound("night"); } catch (e) {} }, 5000);
 
-function achList() {
-  const w = movies.filter(m => m.status === "watched"), r = w.filter(m => m.my_rating);
+function achList(src) {
+  const MV = src ? src.movies : movies, w = MV.filter(m => m.status === "watched"), r = w.filter(m => m.my_rating);
   const dated = w.filter(m => m.watched_at && !m.date_guess), yr = String(new Date().getFullYear());
   const days = {}; dated.forEach(m => days[m.watched_at] = (days[m.watched_at] || 0) + 1);
   const mset = new Set(dated.map(m => m.watched_at.slice(0, 7)));
@@ -2138,15 +2196,16 @@ function achList() {
   [...mset].sort().forEach(k => { const [Y, M] = k.split("-").map(Number), n = Y * 12 + M; cur = prev !== null && n === prev + 1 ? cur + 1 : 1; prev = n; streak = Math.max(streak, cur); });
   const gen = new Set(); w.forEach(m => (m.genres || "").split(", ").filter(Boolean).forEach(g => gen.add(g)));
   const films = w.filter(m => m.media_type !== "tv");
-  const fr = typeof friends !== "undefined" && friendsLoaded ? friends.length : null;
+  const fr = src ? null : typeof friends !== "undefined" && friendsLoaded && friends ? friends.length : null;
   const gc = subs => w.filter(m => { const g = (m.genres || "").toLowerCase(); return [].concat(subs).some(s => g.includes(s)); }).length;
   const tm = m => +m.tmdb_rating || 0;
-  const pr = typeof profile === "object" && profile ? profile : {};
-  const eg = eggSet();
+  const pr = src ? src.profile || {} : typeof profile === "object" && profile ? profile : {};
+  const eg = src ? new Set() : eggSet(), ac = src ? {} : actGet();
+  const seas = f => dated.filter(m => f(m.watched_at.slice(5))).length;
   return [
     { c: "Просмотры", k: "watch", i: "🎬", n: "Киноман", d: "просмотрено фильмов и сериалов", v: w.length, t: [25, 100, 250] },
     { c: "Просмотры", k: "tv", i: "📺", n: "Сериальщик", d: "сериалов в «Просмотрено»", v: w.filter(m => m.media_type === "tv").length, t: [3, 10, 25] },
-    { c: "Просмотры", k: "year", i: "📅", n: "Год кино", d: "просмотров в " + yr + " году", v: dated.filter(m => m.watched_at.startsWith(yr)).length, t: [12, 52, 100] },
+    { c: "Сезонные", k: "year", i: "📅", n: "Год кино", d: "просмотров в " + yr + " году", v: dated.filter(m => m.watched_at.startsWith(yr)).length, t: [12, 52, 100] },
     { c: "Просмотры", k: "fresh", i: "🆕", n: "Свежак", d: "новинок " + yr + " года", v: w.filter(m => m.year === yr).length, t: [3, 10, 20] },
     { c: "Просмотры", k: "classic", i: "🎞", n: "Классика", d: "фильмов до 2000 года", v: films.filter(m => +m.year && +m.year < 2000).length, t: [5, 15, 30] },
     { c: "Просмотры", k: "decades", i: "⏳", n: "Машина времени", d: "разных десятилетий в списке", v: new Set(w.map(m => Math.floor(+m.year / 10)).filter(x => x >= 190)).size, t: [3, 5, 8] },
@@ -2158,7 +2217,7 @@ function achList() {
     { c: "Время и привычки", k: "weekend", i: "🛋", n: "Выходной сеанс", d: "просмотров в субботу и воскресенье", v: dated.filter(m => { const d = new Date(m.watched_at + "T12:00:00").getDay(); return d === 0 || d === 6; }).length, t: [10, 30, 80] },
     { c: "Время и привычки", k: "long", i: "🐘", n: "Долгое кино", d: "фильмов от 150 минут", v: films.filter(m => (m.runtime || 0) >= 150).length, t: [5, 15, 30] },
     { c: "Время и привычки", k: "short", i: "⚡", n: "Коротко и ясно", d: "фильмов до 95 минут", v: films.filter(m => m.runtime && m.runtime <= 95).length, t: [5, 15, 30] },
-    { c: "Время и привычки", k: "plan", i: "📋", n: "Планировщик", d: "фильмов в «Хочу»", v: movies.length - w.length, t: [10, 30, 75] },
+    { c: "Время и привычки", k: "plan", i: "📋", n: "Планировщик", d: "фильмов в «Хочу»", v: MV.length - w.length, t: [10, 30, 75] },
     { c: "Оценки и вкус", k: "rate", i: "⭐", n: "Критик", d: "оценок поставлено", v: r.length, t: [10, 50, 150] },
     { c: "Оценки и вкус", k: "note", i: "✍️", n: "Рецензент", d: "заметок к фильмам", v: w.filter(m => (m.note || "").trim()).length, t: [5, 20, 50] },
     { c: "Оценки и вкус", k: "ten", i: "🏆", n: "Шедевры", d: "оценок 10/10", v: r.filter(m => m.my_rating === 10).length, t: [3, 10, 25] },
@@ -2176,7 +2235,16 @@ function achList() {
     { c: "Жанры", k: "g_cart", i: "🧸", n: "Мультяшка", d: "мультфильмов", v: gc("мультфильм"), t: [3, 10, 25] },
     ...(fr === null ? [] : [{ c: "Общение", k: "friends", i: "🤝", n: "Компания", d: "друзей на сайте", v: fr, t: [1, 3, 5] }]),
     { c: "Общение", k: "card", i: "🪪", n: "Визитка", d: "полей профиля заполнено (имя, обо мне, аватар, баннер)", v: [pr.display_name, pr.bio, pr.avatar_url, pr.banner_url].filter(Boolean).length, t: [2, 3, 4] },
-    { c: "Секреты", k: "eggs", i: "🕵️", n: "Охотник за пасхалками", d: "пасхалок найдено", v: EGGS.filter(e => eg.has(e.id)).length, t: [1, 3, EGGS.length] },
+    { c: "Сезонные", k: "ny", i: "🎄", n: "Новогодний сеанс", d: "просмотров с 24 декабря по 8 января", v: seas(x => x >= "12-24" || x <= "01-08"), t: [1, 3, 7] },
+    { c: "Сезонные", k: "hw", i: "🎃", n: "Хэллоуин", d: "просмотров с 28 октября по 2 ноября", v: seas(x => x >= "10-28" && x <= "11-02"), t: [1, 3, 7] },
+    { c: "Сезонные", k: "sum", i: "🏖", n: "Летний сеанс", d: "просмотров в июне, июле и августе", v: seas(x => x >= "06" && x < "09"), t: [5, 15, 30] },
+    { c: "Действия", k: "first", i: "🎯", n: "Первая кровь", d: "первых шагов из трёх: оценка, заметка, друг", v: [r.length > 0, w.some(m => (m.note || "").trim()), fr > 0].filter(Boolean).length, t: [3] },
+    { c: "Действия", k: "re", i: "🔄", n: "Переоценка", d: "раз вы меняли оценку, когда передумали", v: ac.re || 0, t: [1, 5, 15], loc: true },
+    { c: "Действия", k: "hk", i: "🏒", n: "Хоккеист", d: "фильмов добавлено в «Хочу» за один день", v: Math.max(0, ...Object.keys(ac).filter(x => x.startsWith("hk:")).map(x => ac[x])), t: [10], loc: true },
+    { c: "Действия", k: "gs", i: "✅", n: "Закрыл гештальт", d: "фильмов из «Хочу» просмотрено", v: ac.gs || 0, t: [1, 10, 30], loc: true },
+    { c: "Действия", k: "warm", i: "🤗", n: "Тёплый приём", d: "друг добавил вас по коду", v: ac.warm ? 1 : 0, t: [1], loc: true },
+    { c: "Действия", k: "bk", i: "💾", n: "Резервная копия", d: "раз скачана копия данных", v: ac.bk || 0, t: [1, 3], loc: true },
+    { c: "Секреты", k: "eggs", i: "🕵️", n: "Охотник за пасхалками", d: "пасхалок найдено", v: EGGS.filter(e => eg.has(e.id)).length, t: [1, 6, EGGS.length] },
     ...EGGS.map(e => ({ c: "Секреты", k: "egg_" + e.id, i: e.i, n: e.n, d: e.h, v: eg.has(e.id) ? 1 : 0, t: [1], sec: true }))
   ].map(a => ({ ...a, lv: a.t.filter(x => a.v >= x).length }));
 }
@@ -2192,16 +2260,16 @@ function achTeaser() {
   return `<button type="button" class="ach-teaser" id="achGo"><span class="ach-tr" aria-hidden="true">${S.rk[1]}</span><span class="ach-tx"><b>Достижения</b><small>Ранг «${S.rk[2]}» · открыто ${S.got} из ${L.length}</small></span><span class="ach-go">Открыть →</span></button>`;
 }
 function achTab() {
-  const L = achList(), S = achStat(L), pct = Math.round(S.pc);
+  const L = achList(), S = achStat(L), pct = Math.round(S.pc), RR = frRar();
   const card = a => {
     const len = a.t.length, cls = a.lv === 0 ? "t0" : a.lv === len ? "t3" : "t" + a.lv;
     const nx = a.t[a.lv], base = a.lv ? a.t[a.lv - 1] : 0, p = nx ? Math.min(100, Math.max(0, Math.round((a.v - base) / (nx - base) * 100))) : 100;
-    const hid = a.sec && !a.lv, tier = len === 1 ? (a.lv ? "раскрыто" : "секрет") : ["", "бронза", "серебро", "золото"][a.lv];
+    const rar = RR && !a.loc && !a.sec && a.lv ? ` · у ${Math.round((RR.m[a.k] || 0) / RR.n * 100)}% друзей` : "", pn = pinGet().includes(a.k), hid = a.sec && !a.lv, tier = len === 1 ? (a.lv ? "раскрыто" : "секрет") : ["", "бронза", "серебро", "золото"][a.lv];
     const pips = len > 1 ? `<span class="pips">${a.t.map((x, i) => `<i class="${i < a.lv ? "on" : ""}"></i>`).join("")}</span>` : "";
     const meta = hid ? "Подсказка: " + esc(a.d) : a.sec ? esc(a.d) : nx ? `${a.v} / ${nx} ${esc(a.d)}` : `${a.v} ${esc(a.d)} · максимум`;
-    return `<div class="ac ${cls}${a.sec ? " sec" : ""}" data-got="${a.lv ? 1 : 0}" title="${esc(hid ? "Секретное достижение" : a.n + ": " + a.d)}"><div class="ac-m" aria-hidden="true">${hid ? "🔒" : a.i}</div><div class="ac-b"><b>${hid ? "???" : esc(a.n)}</b><div class="ac-tier">${pips}<em>${tier}</em></div><div class="meta">${meta}</div>${nx && !a.sec ? `<div class="pbar"><i style="width:${p}%"></i></div>` : ""}</div></div>`;
+    return `<div class="ac ${cls}${a.sec ? " sec" : ""}" data-got="${a.lv ? 1 : 0}" title="${esc(hid ? "Секретное достижение" : a.n + ": " + a.d)}">${a.lv ? `<button type="button" class="pin${pn ? " on" : ""}" data-pin="${a.k}" aria-pressed="${pn}" title="Показать в шапке профиля (до трёх)">📌</button>` : ""}<div class="ac-m" aria-hidden="true">${hid ? "🔒" : a.i}</div><div class="ac-b"><b>${hid ? "???" : esc(a.n)}</b><div class="ac-tier">${pips}<em>${tier}</em></div><div class="meta">${meta}${rar}</div>${nx && !a.sec ? `<div class="pbar"><i style="width:${p}%"></i></div>` : ""}</div></div>`;
   };
-  const groups = ["Просмотры", "Время и привычки", "Оценки и вкус", "Жанры", "Общение", "Секреты"].map(g => {
+  const groups = ["Просмотры", "Время и привычки", "Оценки и вкус", "Жанры", "Сезонные", "Действия", "Общение", "Секреты"].map(g => {
     const it = L.filter(a => a.c === g); if (!it.length) return "";
     return `<section class="ach-grp"><h3>${g}<small>${it.filter(a => a.lv).length} из ${it.length}</small></h3><div class="ach2">${it.map(card).join("")}</div></section>`;
   }).join("");
@@ -2210,7 +2278,11 @@ function achTab() {
   <div id="achWrap">${groups}</div>`;
 }
 function achBind() {
-  const flt = $("#achFlt");
+  const flt = $("#achFlt"), aw = $("#achWrap");
+  if (aw) aw.onclick = e => { const b = e.target.closest("[data-pin]"); if (!b) return; let p = pinGet(); const k = b.dataset.pin;
+    if (p.includes(k)) p = p.filter(x => x !== k); else if (p.length >= 3) return toast("Закрепить можно до трёх достижений"); else p.push(k);
+    try { localStorage.setItem("pin:" + (userId || "guest"), JSON.stringify(p)); } catch (x) {} b.classList.toggle("on", p.includes(k)); b.setAttribute("aria-pressed", p.includes(k)); toast(p.includes(k) ? "Закреплено в шапке профиля" : "Откреплено"); };
+  if (aw && !isGuest && !friendsLoaded) loadFriends().then(() => { if (pfTab === "ach" && $("#achWrap")) renderProfile(); }).catch(() => {});
   if (flt) flt.onclick = e => {
     const b = e.target.closest("[data-f]"); if (!b) return;
     flt.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
@@ -2230,6 +2302,131 @@ function achCheck() {
   try { localStorage.setItem(key, JSON.stringify({ ...(old || {}), ...now })); } catch (e) {}
 }
 
+/* обложка вместо отсутствующего постера: цвет зависит от названия */
+function cover(m) {
+  const t = m.title || "", y = m.year || ""; let h = 0; for (const c of t) h = (h * 31 + c.charCodeAt(0)) % 360;
+  return `<div class="noimg cv" style="--h:${h}"><i aria-hidden="true">${m.media_type === "tv" ? "📺" : "🎬"}</i><b>${esc(t)}</b>${y ? `<small>${esc(y)}</small>` : ""}</div>`;
+}
+document.addEventListener("error", e => {
+  const im = e.target; if (!im || im.tagName !== "IMG" || !im.closest(".tile,.card") || !/tmdb/.test(im.src)) return;
+  const c = im.closest(".tile,.card"), mt = c.dataset.mt, m = movies.find(x => x.tmdb_id === +c.dataset.tid && (x.media_type || "movie") === (mt || "movie"));
+  im.outerHTML = cover({ title: (m && m.title) || im.alt || c.title, year: m && m.year, media_type: mt });
+}, true);
+
+/* ---------- действия, закреплённые, редкость, достижения друзей ---------- */
+const actKey = () => "act:" + (userId || "guest");
+function actGet() { try { return JSON.parse(localStorage.getItem(actKey()) || "{}"); } catch (e) { return {}; } }
+function act(k, n = 1, set) {
+  if (isGuest || !n) return; const a = actGet(); a[k] = set ? 1 : (a[k] || 0) + n;
+  try { localStorage.setItem(actKey(), JSON.stringify(a)); } catch (e) {}
+  setTimeout(() => { try { achCheck(); } catch (e) {} }, 900);
+}
+const pinGet = () => { try { return JSON.parse(localStorage.getItem("pin:" + (userId || "guest")) || "[]"); } catch (e) { return []; } };
+const achCls = a => a.lv === a.t.length ? "t3" : "t" + a.lv;
+function pinsHtml() {
+  const p = pinGet(); if (!p.length) return "";
+  const L = achList(), h = p.map(k => L.find(a => a.k === k)).filter(a => a && a.lv).map(a => `<i class="${achCls(a)}" title="${esc(a.n)}">${a.i}</i>`).join("");
+  return h ? `<span class="pins">${h}</span>` : "";
+}
+function frRar() {
+  if (isGuest || !friendsLoaded || !friends || !friends.length) return null;
+  const m = {}; friends.forEach(f => achList({ movies: f.movies, profile: f.profile }).forEach(a => { if (!a.loc && !a.sec && a.lv) m[a.k] = (m[a.k] || 0) + 1; }));
+  return { m, n: friends.length };
+}
+function frGoldScan() {
+  const k = "fg:" + userId; let old = null; try { old = JSON.parse(localStorage.getItem(k) || "null"); } catch (e) {}
+  const now = {}, ev = [];
+  friends.forEach(f => { now[f.id] = {}; achList({ movies: f.movies, profile: f.profile }).filter(a => !a.loc && !a.sec && a.t.length > 1).forEach(a => { const g = a.lv === a.t.length ? 1 : 0; now[f.id][a.k] = g; if (old && old[f.id] && old[f.id][a.k] === 0 && g) ev.push({ f: fName(f), i: a.i, n: a.n, ts: Date.now() }); }); });
+  try { localStorage.setItem(k, JSON.stringify(now)); if (ev.length) { const ek = "fge:" + userId; localStorage.setItem(ek, JSON.stringify(ev.concat(JSON.parse(localStorage.getItem(ek) || "[]")).slice(0, 12))); } } catch (e) {}
+}
+function frGoldHtml() {
+  try { const l = JSON.parse(localStorage.getItem("fge:" + userId) || "[]").filter(x => Date.now() - x.ts < 12096e5).slice(0, 4);
+    return l.length ? `<div class="fg-box">${l.map(x => `<span>🥇 <b>${esc(x.f)}</b> открыл(а) золото: ${x.i} ${esc(x.n)}</span>`).join("")}</div>` : ""; } catch (e) { return ""; }
+}
+async function loadFeed(tok) {
+  await loadFeed0(tok); const b = $("#feedBox");
+  if (b && tok === homeTok && friends && friends.length) { const g = frGoldHtml(); if (g) b.insertAdjacentHTML("afterbegin", g); }
+}
+
+/* ---------- новые пасхалки ---------- */
+const SITE_BDAY = "11-24";
+const reduceMo = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+function projFlash() { if (reduceMo()) return; const o = document.createElement("div"); o.className = "proj"; document.body.appendChild(o); setTimeout(() => o.remove(), 1300); }
+let thT = [], rnC = [], tkC = [], ruleT = 0, lastAct = Date.now();
+function themeEgg() { const n = Date.now(); thT = thT.filter(x => n - x < 8000); thT.push(n); if (thT.length >= 5) { thT = []; projFlash(); eggFound("dark"); } }
+document.addEventListener("click", e => {
+  const t = e.target; if (!t || !t.closest) return;
+  const sp = t.closest("#profileView .mstats span");
+  if (sp && /средняя оценка/.test(sp.textContent)) { const n = Date.now(); rnC = rnC.filter(x => n - x < 6000); rnC.push(n); if (rnC.length >= 10) { rnC = []; eggFound("rain"); } }
+  if (t.tagName === "IMG" && t === document.querySelector("#mvBody img") && /tmdb/.test(t.src)) {
+    const n = Date.now(); tkC = tkC.filter(x => n - x < 1500); tkC.push(n);
+    if (tkC.length >= 3) { tkC = []; t.classList.remove("flip2"); void t.offsetWidth; t.classList.add("flip2"); eggFound("take2"); }
+  }
+});
+document.addEventListener("input", e => {
+  const t = e.target; if (!t || !/^(q|fq)$/.test(t.id) || !/бойцовск\S*\s+клуб|fight\s*club/i.test(t.value) || Date.now() - ruleT < 8000) return;
+  ruleT = Date.now(); eggFound("rule"); setTimeout(() => toast("🥊 Первое правило Бойцовского клуба: никому не рассказывать о Бойцовском клубе."), 2800);
+});
+function creditsRoll() {
+  const o = document.createElement("div"); o.id = "credits"; o.className = "credits";
+  o.innerHTML = `<div class="cr-in"${reduceMo() ? ' style="animation:none"' : ""}><b>ПОИСК КАДРОВ</b><p>В главных ролях<br>вы</p><p>Режиссёр монтажа<br>тоже вы</p><p>Сюжет<br>минута без движения мышью</p><p>Попкорн предоставлен зрителем</p><p>Любые совпадения с реальными просмотрами случайны</p></div><small>Шевельните мышью, чтобы вернуться</small>`;
+  document.body.appendChild(o); eggFound("credits");
+}
+["mousemove", "keydown", "touchstart", "wheel", "click", "scroll"].forEach(ev => addEventListener(ev, () => { lastAct = Date.now(); const c = $("#credits"); if (c) c.remove(); }, { passive: true, capture: true }));
+setInterval(() => { if (Date.now() - lastAct > 6e4 && !$("#credits") && !$("#app").hidden && !document.hidden && !document.querySelector("dialog[open]")) creditsRoll(); }, 3000);
+(() => {
+  const d = new Date(), real = String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0") === SITE_BDAY;
+  if (!real && !/[?&]bday\b/.test(location.search)) return;
+  document.body.classList.add("bday"); if (real) setTimeout(() => eggFound("bday"), 4000);
+})();
+(() => {
+  const P = ["Личный список фильмов", "Оценки, заметки, достижения", "Что посмотреть сегодня?", "Кино вдвоём с друзьями"]; let i = 0;
+  const eye = $("#pwEye"); if (eye) eye.onclick = () => { const p = $("#pw"), sh = p.type === "password"; p.type = sh ? "text" : "password"; eye.setAttribute("aria-label", sh ? "Скрыть пароль" : "Показать пароль"); };
+  setInterval(() => { const a = $("#auth"), t = $("#auth .tag2"); if (!a || a.hidden || !t || reduceMo()) return; t.style.opacity = 0; setTimeout(() => { t.textContent = P[i = ++i % P.length]; t.style.opacity = 1; }, 350); }, 3800);
+})();
+
+/* ---------- экскурсия по сайту (гостевой режим) ---------- */
+const vis = sel => [...document.querySelectorAll(sel)].find(e => e.offsetParent !== null) || null;
+const TOUR = [
+  { h: "Добро пожаловать в «Поиск кадров»", p: "Это пример списка: за минуту покажем, где что. Листайте стрелками ← →, закрыть можно клавишей Esc." },
+  { t: "home", el: () => vis("#homeView .hero,#homeView .welcome"), h: "Главная", p: "Баннер «Что посмотреть сегодня» с кнопкой «Другой вариант», новые серии, премьеры из вашего «Хочу», рекомендации и тренды." },
+  { t: "watchlist", el: () => vis('[data-t="watchlist"]'), h: "Хочу посмотреть", p: "Здесь копятся планы. Фильтры по жанру, длительности и рейтингу, а кнопка «Что посмотреть сегодня?» выберет фильм за вас." },
+  { t: "watched", el: () => vis("#list [data-tid]"), h: "Просмотрено и оценки", p: "Нажмите на постер: описание, актёры, трейлер, ссылки на IMDb и Кинопоиск. Удерживайте палец или нажмите правой кнопкой мыши: быстрая оценка от 1 до 10." },
+  { t: "recs", el: () => vis('[data-t="recs"]'), h: "Рекомендации", p: "Подборки строятся из ваших оценок: похожее на любимое, любимые жанры и что советуют друзья." },
+  { t: "search", el: () => vis('[data-t="search"]'), h: "Найти фильм", p: "Подсказки появляются уже с двух букв и прощают опечатки. Быстро открыть поиск: клавиша / или Ctrl+K." },
+  { el: () => vis('[data-t="colls"]'), h: "Друзья и коллекции", p: "Друзей добавляют по коду: видны их оценки, совпадение вкусов и фильм «на двоих». Коллекции собирают вместе. Это открывается после регистрации." },
+  { t: "profile", el: () => vis("#meBtn"), h: "Профиль и достижения", p: "Статистика, любимые фильмы, итоги года, больше 40 достижений с рангами, тёмная и светлая тема. А ещё на сайте спрятаны пасхалки: найдёте?" },
+  { h: "Это всё", p: "Своё кино заведёте за полминуты: почта и пароль. Экскурсию можно повторить кнопкой в верхней плашке.", end: true }
+];
+let ti = 0, trOn = false;
+function tourPlace() {
+  if (!trOn) return; const s = TOUR[ti], el = s.el && s.el(), c = $("#trCard"), h = $("#trHl"); if (!c) return;
+  const vw = innerWidth, vh = innerHeight, cw = c.offsetWidth, ch = c.offsetHeight;
+  if (el) {
+    const r = el.getBoundingClientRect(), pd = 6; Object.assign(h.style, { left: r.left - pd + "px", top: r.top - pd + "px", width: r.width + 2 * pd + "px", height: r.height + 2 * pd + "px" });
+    let top = r.bottom + 14 + ch < vh ? r.bottom + 14 : r.top - 14 - ch; if (top < 8) top = Math.max(8, vh - ch - 12);
+    c.style.top = top + "px"; c.style.left = Math.min(Math.max(8, r.left + r.width / 2 - cw / 2), vw - cw - 8) + "px";
+  } else { Object.assign(h.style, { left: "50%", top: "50%", width: "0px", height: "0px" }); c.style.top = Math.max(8, (vh - ch) / 2) + "px"; c.style.left = (vw - cw) / 2 + "px"; }
+}
+function tourStep(i) {
+  if (i < 0) i = 0; if (i >= TOUR.length) return tourEnd(); ti = i; const s = TOUR[i];
+  if (s.t) go(s.t); else if (s.end) go("home");
+  $("#trCard").innerHTML = `<div class="tr-dots">${TOUR.map((_, k) => `<i class="${k <= i ? "on" : ""}"></i>`).join("")}</div><h4>${esc(s.h)}</h4><p>${esc(s.p)}</p><div class="tr-f"><span>${i + 1} из ${TOUR.length}</span>${s.end ? `<button type="button" data-tr="x">Ещё посмотрю</button><button class="main" type="button" data-tr="reg">Зарегистрироваться</button>` : `${i ? `<button type="button" data-tr="b">Назад</button>` : `<button type="button" data-tr="x">Пропустить</button>`}<button class="main" type="button" data-tr="n" id="trNext">Далее</button>`}</div>`;
+  const fin = () => { const el = s.el && s.el(); if (el && !el.closest(".top,#bnav")) el.scrollIntoView({ block: "center", behavior: reduceMo() ? "auto" : "smooth" }); tourPlace(); const b = $("#trNext") || $("#trCard .main"); if (b) b.focus({ preventScroll: true }); };
+  tourPlace(); setTimeout(fin, s.t ? 380 : 0); setTimeout(tourPlace, 800);
+}
+function tourEnd(quiet) { trOn = false; const o = $("#tour"); if (o) o.hidden = true; if (!quiet) try { localStorage.setItem("tour", "1"); } catch (e) {} }
+function tourStart() {
+  if (!isGuest) return; let o = $("#tour");
+  if (!o) {
+    o = document.createElement("div"); o.id = "tour"; o.innerHTML = '<div class="tr-hl" id="trHl"></div><div class="tr-card" id="trCard" role="dialog" aria-label="Экскурсия по сайту"></div>'; document.body.appendChild(o);
+    o.onclick = e => { const b = e.target.closest("[data-tr]"); if (!b) return; const a = b.dataset.tr; if (a === "n") tourStep(ti + 1); else if (a === "b") tourStep(ti - 1); else if (a === "reg") { tourEnd(); guestExit(true); } else tourEnd(); };
+    addEventListener("resize", tourPlace); addEventListener("scroll", tourPlace, true);
+    document.addEventListener("keydown", e => { if (!trOn) return; if (e.key === "ArrowRight") tourStep(ti + 1); else if (e.key === "ArrowLeft") tourStep(ti - 1); else if (e.key === "Escape") tourEnd(); });
+  }
+  o.hidden = false; trOn = true; tourStep(0);
+}
+
 /* ---------- быстрая оценка: долгое нажатие или правый клик по карточке ---------- */
 const qr = document.createElement("div"); qr.id = "qrate"; qr.hidden = true; document.body.appendChild(qr);
 let qrM = null, lpT = null, lpX = 0, lpY = 0, lpFired = false;
@@ -2246,6 +2443,7 @@ qr.onclick = async e => {
   if (b.dataset.qa === "open") { qrClose(); return openMovie(m.tmdb_id, m.media_type || "movie"); }
   const patch = b.dataset.qa === "clear" ? { my_rating: null } : { status: "watched", my_rating: +b.dataset.qv, watched_at: m.watched_at || today() };
   qrClose();
+  if (patch.my_rating) { if (m.my_rating && m.my_rating !== patch.my_rating) act("re"); if (m.status === "watchlist") act("gs"); }
   const { error } = await sb.from("movies").update(patch).eq("id", m.id);
   if (error) return toast(error.message);
   toast(patch.my_rating ? "Оценка " + patch.my_rating + " сохранена" : "Оценка убрана"); await load();
@@ -2431,7 +2629,7 @@ try { matchMedia("(prefers-color-scheme: light)").addEventListener("change", () 
 function toggleTheme() {
   const next = { auto: "dark", dark: "light", light: "auto" }[themeMode()];
   try { next === "auto" ? localStorage.removeItem("th") : localStorage.setItem("th", next); } catch (e) {}
-  applyTheme(); syncMenu();
+  applyTheme(); syncMenu(); themeEgg();
 }
 
 /* ---------- меню профиля (иконка человечка) ---------- */
@@ -2520,6 +2718,7 @@ async function openMovie(tid, mt = "movie") {
     else if (a === "seen" && !m) await addMovie(tid, "watched", mt);
     else if (a === "seen") {
       const r = await rateDialog(ftitle, m.my_rating, m.note, (m.date_guess ? "" : m.watched_at) || (m.status === "watchlist" ? today() : "")); if (!r) return;
+      if (m.my_rating && m.my_rating !== r.rating) act("re"); if (m.status === "watchlist") act("gs");
       const { error } = await sb.from("movies").update({ status: "watched", my_rating: r.rating, note: r.note, ...dPatch(m, r) }).eq("id", m.id);
       if (error) return toast(error.message); await load();
     } else if (a === "del") {
@@ -3032,7 +3231,7 @@ async function yearCard(d) {
 /* ---------- резервная копия одним файлом (JSON) ---------- */
 const BK_COLS = ["tmdb_id", "media_type", "title", "year", "poster", "tmdb_rating", "runtime", "genres", "status", "my_rating", "note", "watched_at", "created_at", "season", "episode", "date_guess"];
 function exportJson() {
-  if (!movies.length) return toast("Список пока пуст");
+  if (!movies.length) return toast("Список пока пуст"); act("bk");
   const prefs = {}; for (const k of ["th", "vw", "ign:" + userId]) { try { const v = localStorage.getItem(k); if (v != null) prefs[k.replace(userId, "@")] = v; } catch (e) {} }
   const data = { app: "poisk-kadrov", v: 1, exported_at: new Date().toISOString(), movies: movies.map(m => { const o = {}; BK_COLS.forEach(k => { if (m[k] !== undefined) o[k] = m[k]; }); return o; }), prefs };
   const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(data)], { type: "application/json" }));
