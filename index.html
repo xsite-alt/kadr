@@ -602,21 +602,6 @@ main:focus{outline:none}
 .guest-lock .gl-i{font-size:2rem;line-height:1}.guest-lock p{max-width:420px;margin:0}
 #guestDlg{width:min(440px,92vw)}
 @media (max-width:640px){#guestBar{font-size:.82rem;padding:7px 8px 7px 12px;flex-wrap:nowrap}#guestBar .gb-l{display:none}#guestBar button{padding:6px 12px;min-height:34px;flex:none}}
-/* полноэкранный режим плеера в отдельной вкладке (?watch=1) */
-body.watch-mode{overflow:hidden;background:#08080c}
-#watchPage{position:fixed;inset:0;display:flex;flex-direction:column;background:#08080c;color:#f2f2f4;z-index:500}
-.wp-top{display:flex;align-items:center;gap:10px;padding:10px 16px;background:#121218;border-bottom:1px solid #26262f;flex-wrap:wrap}
-.wp-title{font-family:var(--disp);font-size:1.25rem;font-weight:600;margin-right:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:420px}
-.wp-tabs{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.wp-tabs button,.wp-tabs a{padding:6px 13px;font-size:.82rem;border-radius:999px;background:#ffffff0d;border:1px solid #26262f;color:#c9c9d2;text-decoration:none;cursor:pointer;font-weight:600}
-.wp-tabs button:hover,.wp-tabs a:hover{border-color:#f5b041;color:#f2f2f4}
-.wp-tabs button.on{background:#f5b041;color:#1a1204;border-color:#f5b041}
-#wpFrame{flex:1;position:relative;background:#000;min-height:0}
-#wpFrame iframe{width:100%;height:100%;border:0;display:block}
-.wp-err{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:24px;text-align:center;color:#8a8a96;max-width:480px;margin:0 auto}
-.wp-err b{color:#f2f2f4;font-size:1.05rem}
-.wp-err a{display:inline-flex;align-items:center;padding:9px 18px;border-radius:999px;background:#f5b041;color:#1a1204;font-weight:700;text-decoration:none}
-@media(max-width:640px){.wp-top{padding:8px 10px;gap:6px}.wp-title{font-size:1rem;max-width:100%;width:100%}.wp-tabs button,.wp-tabs a{padding:5px 10px;font-size:.78rem}}
 </style>
 </head>
 <body>
@@ -743,7 +728,7 @@ body.watch-mode{overflow:hidden;background:#08080c}
 /* страж запуска: если через 6 секунд не виден ни вход, ни приложение, показываем причину вместо пустой страницы */
 addEventListener("load", () => setTimeout(() => { try {
   const a = document.getElementById("app"), u = document.getElementById("auth");
-  if (location.search.includes("watch=1") || !a || !u || !a.hidden || !u.hidden) return;
+  if (!a || !u || !a.hidden || !u.hidden) return;
   const errs = ((window.__adm && window.__adm.err) || []).slice(-4).map(x => x.k + ": " + x.m + " (" + x.s + ")").join("\n");
   const d = document.createElement("div");
   d.style.cssText = "position:fixed;inset:0;z-index:9999;background:#0b0b0f;color:#f2f2f4;font:15px/1.5 system-ui,sans-serif;padding:24px;overflow:auto";
@@ -759,6 +744,7 @@ addEventListener("load", () => setTimeout(() => { try {
 const SUPABASE_URL = "https://qthdglmqonzmpiwrqjhr.supabase.co";
 const SUPABASE_KEY = "sb_publishable_HejCyEo-h39wfHXEjcrzXA_m4JHNuBq";
 const TMDB_KEY = "5646152e8fba735a975c49162c0d2a88";
+const KINOGO_URL = "https://xkohb.kinogo.luxury";
 /* ================================ */
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -880,7 +866,7 @@ function guestNeed(what) {
   d.onclick = e => { const b = e.target.closest("[data-g]"); if (b) { d.close(); if (b.dataset.g === "reg") guestExit(true); } else if (e.target === d) d.close(); };
   if (!d.open) d.showModal();
 }
-if (!watchModeInit()) { sb.auth.getSession().then(({ data }) => showSession(data.session)).catch(() => showSession(null)); }
+sb.auth.getSession().then(({ data }) => showSession(data.session)).catch(() => showSession(null));
 sb.auth.onAuthStateChange((_, s) => showSession(s));
 
 /* ---------- данные ---------- */
@@ -2050,7 +2036,7 @@ function extLinks(f, ftitle, fdate, tv) {
   if (imdb) L.push(`<a class="ext" href="https://www.imdb.com/title/${encodeURIComponent(imdb)}/" target="_blank" rel="noopener">IMDb ↗</a>`);
   L.push(`<a class="ext" href="https://www.kinopoisk.ru/index.php?kp_query=${q}" target="_blank" rel="noopener" title="Поиск на Кинопоиске (может не открываться без VPN)">Кинопоиск ↗</a>`);
   if (!isGuest) {
-    L.push(`<a class="ext" href="https://www.google.com/search?q=${encodeURIComponent(ftitle + (y ? " " + y : "") + " смотреть онлайн")}" target="_blank" rel="noopener">Смотреть онлайн ↗</a>`);
+    L.push(`<a class="ext" href="https://www.google.com/search?q=${encodeURIComponent(ftitle + (y ? " " + y : "") + " смотреть онлайн")}" target="_blank" rel="noopener">Найти в Google ↗</a>`);
   }
   return `<div class="exts">${L.join("")}</div>`;
 }
@@ -2380,7 +2366,7 @@ async function openMovie(tid, mt = "movie") {
     const sm = e.target.closest("[data-sim]"); if (sm) return openMovie(+sm.dataset.sim, mt);
     const a = e.target.dataset.a; if (!a) return;
     if (a === "tr") { $("#tr").innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(e.target.dataset.k)}?autoplay=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`; return; }
-    if (a === "watch") { watchOpenTab(f, tid, tv, m); return; }
+    if (a === "watch") { window.open(KINOGO_URL + "/index.php?do=search&subaction=search&story=" + encodeURIComponent(ftitle), "_blank", "noopener"); return; }
     if (a === "ign" || a === "unign") { a === "ign" ? ignSet().add(tid + "-" + mt) : ignSet().delete(tid + "-" + mt); ignSave(); toast(a === "ign" ? "Скрыто из рекомендаций" : "Возвращено в рекомендации"); if (a === "ign") return $("#mv").close(); }
     else if (a === "ep1" || a === "epset") {
       let s = m.season || 1, n = (m.episode || 0) + 1;
@@ -2401,64 +2387,6 @@ async function openMovie(tid, mt = "movie") {
     }
     openMovie(tid, mt);
   };
-}
-
-/* ---------- плеер в отдельной вкладке (?watch=1) ---------- */
-function watchOpenTab(f, tid, tv, m) {
-  if (isGuest) return;
-  const p = new URLSearchParams({
-    watch: "1",
-    tid: String(tid),
-    mt: tv ? "tv" : "movie",
-    imdb: f.imdb_id || (f.external_ids || {}).imdb_id || "",
-    title: f.title || f.name || "",
-    year: (f.release_date || f.first_air_date || "").slice(0, 4),
-    s: String((m && m.season) || 1),
-    ep: String((m && m.episode) || 1)
-  });
-  window.open(location.origin + location.pathname + "?" + p.toString(), "_blank", "noopener");
-}
-
-function watchModeInit() {
-  const p = new URLSearchParams(location.search);
-  if (p.get("watch") !== "1") return false;
-  const tid = p.get("tid") || "", tv = p.get("mt") === "tv";
-  const title = p.get("title") || "Просмотр", year = p.get("year") || "";
-  const s = p.get("s") || "1", ep = p.get("ep") || "1";
-  const kgUrl = "https://xkohb.kinogo.luxury/index.php?do=search&subaction=search&story=" + encodeURIComponent(title);
-  const gUrl = "https://www.google.com/search?q=" + encodeURIComponent(title + (year ? " " + year : "") + " смотреть онлайн");
-  document.title = title + (year ? " (" + year + ")" : "") + " — Поиск кадров";
-  document.body.classList.add("watch-mode");
-  const wrap = document.createElement("div");
-  wrap.id = "watchPage";
-  wrap.innerHTML = `<div class="wp-top">
-    <div class="wp-title">${esc(title)}${year ? " <span style='color:#8a8a96;font-weight:400'>(" + esc(year) + ")</span>" : ""}${tv ? " <span style='color:#f5b041;font-size:.9rem'>S" + esc(s) + "E" + esc(ep) + "</span>" : ""}</div>
-    <div class="wp-tabs">
-      <button type="button" data-p="vm" class="on">Плеер 1 (VidSrc)</button>
-      <button type="button" data-p="vl">Плеер 2 (VidLink)</button>
-      <button type="button" data-p="es">Плеер 3 (Embed)</button>
-      <a href="${kgUrl}" target="_blank" rel="noopener" style="border-color:#f5b041;color:#f5b041">На русском (Kinogo) ↗</a>
-      <a href="${gUrl}" target="_blank" rel="noopener">Google ↗</a>
-    </div>
-  </div><div id="wpFrame"></div>`;
-  document.body.innerHTML = "";
-  document.body.appendChild(wrap);
-  const frame = $("#wpFrame");
-  const show = src => {
-    wrap.querySelectorAll("[data-p]").forEach(b => b.classList.toggle("on", b.dataset.p === src));
-    let url = "";
-    if (src === "vm") {
-      url = tv ? `https://vidsrc.me/embed/tv?tmdb=${tid}&season=${s}&episode=${ep}` : `https://vidsrc.me/embed/movie?tmdb=${tid}`;
-    } else if (src === "vl") {
-      url = tv ? `https://vidlink.pro/tv/${tid}/${s}/${ep}` : `https://vidlink.pro/movie/${tid}`;
-    } else if (src === "es") {
-      url = tv ? `https://embed.su/embed/tv/${tid}/${s}/${ep}` : `https://embed.su/embed/movie/${tid}`;
-    }
-    frame.innerHTML = `<iframe src="${url}" allowfullscreen referrerpolicy="origin"></iframe>`;
-  };
-  wrap.querySelector(".wp-tabs").onclick = e => { const b = e.target.closest("[data-p]"); if (b) show(b.dataset.p); };
-  show("vm");
-  return true;
 }
 
 /* ---------- общее для фильмов и сериалов ---------- */
