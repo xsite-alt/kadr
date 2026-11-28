@@ -1,5 +1,5 @@
 // Сервис-воркер «Поиск кадров»: оболочка сайта работает офлайн, данные (Supabase, TMDB API) всегда берутся из сети, постеры TMDB кэшируются для скорости.
-const C = "kadry-v3", IMGC = "kadry-img", SHELL = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
+const C = "kadry-v4", IMGC = "kadry-img", SHELL = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(C).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(x => x !== C && x !== IMGC).map(x => caches.delete(x)))).then(() => self.clients.claim())); });
 const trim = async c => { const k = await c.keys(); if (k.length > 500) await c.delete(k[0]); };
