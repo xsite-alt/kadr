@@ -220,8 +220,8 @@ details.taste .main{margin:6px 0 16px}
 .hero button:not(.main){background:#ffffff1c;color:#fff;border-color:#ffffff40;border-radius:999px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .hero.sk{border:0}
 .sec-h{display:flex;align-items:center;justify-content:space-between;gap:10px;}
-.sec-h h3{display:flex;align-items:center;gap:10px}
-.sec-h h3::before{content:"";}
+.sec-h h2{display:flex;align-items:center;gap:10px}
+.sec-h h2::before{content:"";}
 .sec-h small{display:block;font-weight:500;color:var(--mut);font-size:.8rem;margin-top:1px}
 .lnk{background:none;border:0;padding:4px 8px;color:var(--mut);font-weight:600;font-size:.88rem}
 .lnk:hover{color:var(--acc)}
@@ -261,9 +261,9 @@ body{overflow-x:clip}
 #selBar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:30;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:8px 14px;box-shadow:0 10px 30px #0008;max-width:calc(100vw - 24px)}
 /* ===== новый вид: типографика и движение (25.11.2026) ===== */
 :root{--disp:Oswald,"Arial Narrow","Franklin Gothic Medium",Impact,sans-serif}
-.hero h1,.welcome h1,.greet h2,.sec-h h3,.logo b,#profileView .pf-name h2{font-family:var(--disp);font-weight:600;letter-spacing:.012em}
+.hero h1,.welcome h1,.greet h2,.sec-h h2,.logo b,#profileView .pf-name h2{font-family:var(--disp);font-weight:600;letter-spacing:.012em}
 .hero h1{line-height:1;}
-.greet h2{font-size:1.7rem}.sec-h h3{font-size:1.3rem}.logo b{font-size:1.25rem}
+.greet h2{font-size:1.7rem}.sec-h h2{font-size:1.3rem}.logo b{font-size:1.25rem}
 .hero-bg{position:absolute;inset:0;background:center/cover no-repeat;opacity:0;transform-origin:70% 40%;transition:opacity 1s ease}
 .hero-bg.in{opacity:1;animation:kenburns 16s ease-out both}
 .hero::before{z-index:1}.hero-in{z-index:2}
@@ -484,7 +484,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .stat{padding:12px 14px}.stat b{font-size:1.55rem}.stats{gap:10px;margin-top:16px}
 .rail{gap:12px;padding-bottom:10px}
 @media(max-width:640px){
-  .sec{margin-top:16px}.sec-h{margin-bottom:6px}.sec-h h3{font-size:1.05rem}.sec-h small{font-size:.74rem}
+  .sec{margin-top:16px}.sec-h{margin-bottom:6px}.sec-h h2{font-size:1.05rem}.sec-h small{font-size:.74rem}
   .hero{border-radius:18px}.hero h1{font-size:1.8rem}.hero .meta{font-size:.8rem}.hero p{font-size:.88rem;margin-top:6px}.hero .acts{margin-top:10px}
   .greet{margin:0 0 6px}.greet h2{font-size:1.2rem}
   .stats{grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}.stat{padding:8px 6px;text-align:center;border-radius:14px}.stat b{font-size:1.2rem}.stat span{font-size:.66rem}
@@ -513,7 +513,7 @@ body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;ba
 .hero .eyebrow::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#f5b041;margin-right:9px;vertical-align:1px;box-shadow:0 0 10px #f5b041;animation:recBlink 1.6s ease-in-out infinite}
 @keyframes recBlink{50%{opacity:.25}}
 /* заголовки разделов: уголок видоискателя вместо полоски */
-.sec-h h3::before{width:14px;height:16px;border-radius:3px 0 0 0;background:none;border:solid var(--acc);border-width:2px 0 0 2px}
+.sec-h h2::before{width:14px;height:16px;border-radius:3px 0 0 0;background:none;border:solid var(--acc);border-width:2px 0 0 2px}
 /* карточки: мягкая тень, свечение янтарным при наведении, блик */
 .tile{border-radius:16px;border-color:#ffffff14;box-shadow:0 6px 18px #0006}
 .tile::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 40%,#ffffff14 50%,transparent 60%);transform:translateX(-120%);transition:transform .6s ease}
@@ -582,7 +582,7 @@ main:focus{outline:none}
 [data-theme=light] #adm .ok{color:#0b7a4b}[data-theme=light] #adm .warn{color:#9a5d08}[data-theme=light] #adm .bad{color:#c0262d}
 /* ссылки IMDb/Кинопоиск и достижения */
 .exts{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px}
-.ext{display:inline-flex;align-items:center;min-height:30px;padding:4px 12px;border:1px solid var(--line);border-radius:999px;font-size:.8rem;font-weight:600;color:var(--tx);text-decoration:none;background:var(--glass)}
+.ext{display:inline-flex;align-items:center;min-height:34px;padding:4px 12px;border:1px solid var(--line);border-radius:999px;font-size:.8rem;font-weight:600;color:var(--tx);text-decoration:none;background:var(--glass)}
 .ext:hover{border-color:var(--acc);color:var(--acc)}
 /* достижения: отдельная вкладка профиля */
 .ach-hero{display:flex;gap:18px;align-items:center;margin:18px 0 14px;padding:16px 18px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(135deg,rgba(245,176,65,.10),transparent 65%),var(--paper)}
@@ -682,7 +682,7 @@ html:has(#auth:not([hidden])),body:has(#auth:not([hidden])){overflow:hidden}
 #mvBody img.flip2{animation:flip2 .9s ease both;transform-origin:top}@keyframes flip2{0%{transform:perspective(600px) rotateX(0)}45%{transform:perspective(600px) rotateX(-80deg)}60%{transform:perspective(600px) rotateX(8deg)}100%{transform:none}}
 .bday .logo{position:relative}.bday .logo::before{content:"";position:absolute;left:-3px;top:-15px;width:20px;height:22px;background:repeating-linear-gradient(135deg,#f5b041 0 5px,#e8483f 5px 10px);clip-path:polygon(50% 0,100% 100%,0 100%);transform:rotate(-14deg);z-index:2}
 /* достижения: закреплённые, редкость, лента друзей */
-.ac{position:relative}.pin{position:absolute;top:6px;right:6px;width:30px;height:30px;min-height:0;padding:0;border-radius:50%;border:0;background:none;opacity:.5}.pin:hover,.pin.on{opacity:1}.pin.on{background:var(--glass)}
+.ac{position:relative}.pin{position:absolute;top:4px;right:4px;width:36px;height:36px;min-height:0;padding:0;border-radius:50%;border:0;background:none;opacity:.5}.pin:hover,.pin.on{opacity:1}.pin.on{background:var(--glass)}
 .pins{display:inline-flex;gap:4px;margin-left:10px;vertical-align:middle}.pins i{font-style:normal;font-size:.9rem;width:26px;height:26px;display:grid;place-items:center;border-radius:50%;border:1.5px solid #c98a52;background:var(--glass)}.pins i.t2{border-color:#b8c0cc}.pins i.t3{border-color:#f5b041}
 .fg-box{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 10px}.fg-box span{padding:7px 12px;border:1px solid var(--acc);border-radius:99px;font-size:.84rem;background:var(--glass)}
 
@@ -705,6 +705,15 @@ html:has(#auth:not([hidden])),body:has(#auth:not([hidden])){overflow:hidden}
 .gm-t,.gm-od{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px}.gm-t button,.gm-od button{display:grid;gap:4px;padding:6px;height:auto;font-size:.76rem;text-align:center}
 .gm-q{margin:10px 0 16px;padding:14px;border-left:3px solid var(--acc);font-size:1.15rem;font-style:italic}
 .gm-end{text-align:center;display:grid;gap:10px;padding-top:30px}.gm-end h2{font-size:3rem;margin:0;color:var(--acc)}
+
+#wheelBtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;border:1.5px solid var(--acc);color:var(--acc);background:transparent;font-weight:600;transition:background .2s,color .2s}#wheelBtn[hidden]{display:none}#wheelBtn svg{transition:transform .5s cubic-bezier(.2,.8,.2,1)}#wheelBtn:hover{background:var(--acc);color:var(--on-acc)}#wheelBtn:hover svg{transform:rotate(180deg)}
+@media(max-width:640px){#pickBtn{grid-column:span 3}#wheelBtn{grid-column:span 1;padding:0}#wheelBtn .wt{display:none}}
+
+.gm-fc{display:grid;gap:4px;text-align:center;font-size:.76rem}.gm-fc img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:10px}
+.gm-names{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}.gm-names span{padding:8px 12px;border:1px solid var(--acc);border-radius:99px;font-weight:600}
+.map-w{border:1px solid var(--line);border-radius:16px;background:var(--paper);padding:8px;margin-bottom:8px}.map-w canvas{width:100%;height:auto;display:block;cursor:pointer}
+.map-r{display:grid;grid-template-columns:minmax(90px,1fr) 2fr auto;gap:10px;align-items:center;width:100%;margin-top:6px;text-align:left;min-height:38px;padding:6px 12px;position:relative;overflow:hidden}.map-r i{display:block;height:8px;border-radius:99px;background:var(--acc);opacity:.75}.map-r.on{border-color:var(--acc)}
+.map-f{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}.map-f>b{width:100%}.map-f button{min-height:36px;padding:6px 12px;font-size:.84rem}
 </style>
 </head>
 <body>
@@ -780,7 +789,7 @@ html:has(#auth:not([hidden])),body:has(#auth:not([hidden])){overflow:hidden}
       <button id="vwBtn" type="button" title="Вид списка: постеры или строки" aria-label="Вид списка"></button>
       <button id="selBtn">Выбрать</button>
       <button class="main" id="pickBtn">Что посмотреть сегодня?</button>
-      <button id="wheelBtn" type="button">🎡 Колесо</button>
+      <button id="wheelBtn" type="button" title="Колесо фортуны" aria-label="Колесо фортуны"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M12 3v7M12 14v7M3 12h7M14 12h7M5.6 5.6l5 5M13.4 13.4l5 5M18.4 5.6l-5 5M10.6 13.4l-5 5"/></svg><span class="wt">Колесо</span></button>
     </div>
     <div id="pick" hidden></div>
     <div class="posters" id="list"></div>
@@ -1171,7 +1180,7 @@ const tTile = (x, mt, i) => {
   const t = x.title || x.name || "", y = (x.release_date || x.first_air_date || "").slice(0, 4);
   return `<button class="tile" data-tid="${x.id}" data-mt="${mt}" style="--i:${i}" title="${esc(t)}"><img src="${IMG}${x.poster_path}" alt="${esc(t)}" loading="lazy" decoding="async"><span class="ov">${esc(t)} <i>${esc(y)}${mt === "tv" ? ", сериал" : ""}</i></span><span class="bd">${x.vote_average ? `<span>${x.vote_average.toFixed(1)}</span>` : ""}</span></button>`;
 };
-const secHtml = (title, sub, inner, go) => `<div class="sec"><div class="sec-h"><h3><span>${title}${sub ? `<small>${sub}</small>` : ""}</span></h3>${go ? `<button class="lnk" data-go="${go}">Все →</button>` : ""}</div><div class="rail">${inner}</div></div>`;
+const secHtml = (title, sub, inner, go) => `<div class="sec"><div class="sec-h"><h2><span>${title}${sub ? `<small>${sub}</small>` : ""}</span></h>${go ? `<button class="lnk" data-go="${go}">Все →</button>` : ""}</div><div class="rail">${inner}</div></div>`;
 
 function renderHome() {
   const tok = ++homeTok;
@@ -1317,7 +1326,7 @@ async function renderFriends() {
   if ($("#frFeed") && ev.length) $("#frFeed").innerHTML = secHtml("Лента друзей", "Что недавно посмотрели", ev.map(({ f, x }, i) => `<button class="tile" data-tid="${x.tmdb_id}" data-mt="${x.media_type || "movie"}" style="--i:${i}" title="${esc(x.title)}"><img src="${IMG}${x.poster}" alt="${esc(x.title)}" loading="lazy" decoding="async"><span class="ov">${esc(x.title)} <i>${esc(fName(f))}${x.my_rating ? ": ★ " + x.my_rating : ""}</i></span>${x.my_rating ? `<span class="bd"><span>★ ${x.my_rating}</span></span>` : ""}</button>`).join(""));
   try { if (colls === undefined) await loadColls(); } catch (e) {}
   const cl = $("#frColl");
-  if (cl && colls) cl.innerHTML = `<div class="sec"><div class="sec-h"><h3><span>Общие коллекции<small>Подборки, куда фильмы добавляете вы с друзьями</small></span></h3><button class="lnk" data-go="colls">Все →</button></div>${colls.length ? `<div class="fr-list">${colls.slice(0, 6).map(x => `<div class="frw"><button class="fr-row" data-go="colls" data-cx="${x.id}"><span class="nm">${esc(x.name)}</span><span class="mt">фильмов: ${x.items.length} · участников: ${x.members.length + 1}</span></button></div>`).join("")}</div>` : `<div class="meta">Коллекций пока нет. Создайте первую на вкладке «Коллекции».</div>`}</div>`;
+  if (cl && colls) cl.innerHTML = `<div class="sec"><div class="sec-h"><h2><span>Общие коллекции<small>Подборки, куда фильмы добавляете вы с друзьями</small></span></h><button class="lnk" data-go="colls">Все →</button></div>${colls.length ? `<div class="fr-list">${colls.slice(0, 6).map(x => `<div class="frw"><button class="fr-row" data-go="colls" data-cx="${x.id}"><span class="nm">${esc(x.name)}</span><span class="mt">фильмов: ${x.items.length} · участников: ${x.members.length + 1}</span></button></div>`).join("")}</div>` : `<div class="meta">Коллекций пока нет. Создайте первую на вкладке «Коллекции».</div>`}</div>`;
 }
 function showFriend(id) {
   const f = friendData[id], c = compare(f), v = $("#frBox");
@@ -2109,7 +2118,7 @@ function renderProfile() {
       <span><b>${r.filter(m => m.my_rating >= 9).length}</b>оценок 9–10</span>
       <span><b>${w.filter(m => m.media_type === "tv").length}</b>сериалов</span>
     </div>
-    <div class="pf-tabs" id="pfTabs"><button data-pt="overview">Обзор</button><button data-pt="stats">Статистика</button><button data-pt="friends">Друзья<span class="cnt" id="pfFrCnt" hidden></span></button><button data-pt="ach">Достижения<span class="cnt">${achList().filter(a => a.lv).length}</span></button></div>
+    <div class="pf-tabs" id="pfTabs"><button data-pt="overview">Обзор</button><button data-pt="stats">Статистика</button><button data-pt="friends">Друзья<span class="cnt" id="pfFrCnt" hidden></span></button><button data-pt="ach">Достижения<span class="cnt">${achList().filter(a => a.lv).length}</span></button><button data-pt="map">Карта</button></div>
     <div id="pfBody"></div>`;
   const body = {
     overview: () => `
@@ -2128,6 +2137,7 @@ function renderProfile() {
       <div class="pf-sec"><h3>Итоги года</h3><div id="yrBox"></div></div>
       <div class="pf-sec"><h3>Режиссёры и актёры</h3><div class="meta" style="margin-bottom:8px">По вашим фильмам с оценкой 8+</div><div id="ppBox"></div></div>`,
     ach: () => achTab(),
+    map: () => mapTab(),
     friends: () => `<div class="pf-sec" style="margin-top:16px"><div id="frBox"><div class="sk" style="height:60px"></div></div></div>`
   };
   const show = k => {
@@ -2138,6 +2148,7 @@ function renderProfile() {
     if (k === "stats") { yearBox(); loadPeople(); hotBox(); }
     if (k === "friends") renderFriends();
     if (k === "ach") achBind();
+    if (k === "map") mapBind();
   };
   $("#pfTabs").onclick = e => { const b = e.target.closest("[data-pt]"); if (b) show(b.dataset.pt); };
   $("#pfAv").onclick = () => isGuest ? guestNeed("Свой аватар") : pickImage("avatar");
@@ -2257,6 +2268,7 @@ function achList(src) {
     { c: "Жанры", k: "g_cart", i: "🧸", n: "Мультяшка", d: "мультфильмов", v: gc("мультфильм"), t: [3, 10, 25] },
     ...(fr === null ? [] : [{ c: "Общение", k: "friends", i: "🤝", n: "Компания", d: "друзей на сайте", v: fr, t: [1, 3, 5] }]),
     { c: "Общение", k: "card", i: "🪪", n: "Визитка", d: "полей профиля заполнено (имя, обо мне, аватар, баннер)", v: [pr.display_name, pr.bio, pr.avatar_url, pr.banner_url].filter(Boolean).length, t: [2, 3, 4] },
+    { c: "Просмотры", k: "world", i: "🌍", n: "Вокруг света", d: "стран, из которых вы смотрели кино", v: src ? 0 : cnCount(), t: [5, 10, 20], loc: true },
     { c: "Сезонные", k: "ny", i: "🎄", n: "Новогодний сеанс", d: "просмотров с 24 декабря по 8 января", v: seas(x => x >= "12-24" || x <= "01-08"), t: [1, 3, 7] },
     { c: "Сезонные", k: "hw", i: "🎃", n: "Хэллоуин", d: "просмотров с 28 октября по 2 ноября", v: seas(x => x >= "10-28" && x <= "11-02"), t: [1, 3, 7] },
     { c: "Сезонные", k: "sum", i: "🏖", n: "Летний сеанс", d: "просмотров в июне, июле и августе", v: seas(x => x >= "06" && x < "09"), t: [5, 15, 30] },
@@ -2488,7 +2500,9 @@ const GAMES = [
   { k: "hl", i: "⚖️", n: "Выше или ниже", d: "сравните рейтинг TMDB, считается серия верных ответов", run: gmHL },
   { k: "tl", i: "⏳", n: "Хронология", d: "расставьте 5 фильмов от старых к новым", run: gmTL },
   { k: "tag", i: "💬", n: "Угадай по слогану", d: "слоган с афиши, название скрыто", run: gmTag },
-  { k: "odd", i: "🎯", n: "Лишний фильм", d: "три фильма похожи, один выбивается", run: gmOdd }
+  { k: "odd", i: "🎯", n: "Лишний фильм", d: "три фильма похожи, один выбивается", run: gmOdd },
+  { k: "act", i: "🎭", n: "Угадай актёра", d: "три роли одного актёра, назовите его", run: gmAct },
+  { k: "cast", i: "🎬", n: "Угадай по актёрам", d: "по именам актёров угадайте фильм", run: gmCast }
 ];
 function gmMenu() {
   gmStop(); const b = gmGet(); $("#gmT").textContent = "🎮 Игры"; $("#gmBack").hidden = true;
@@ -2512,6 +2526,93 @@ function gmOpen() {
   o.hidden = false; gmMenu();
 }
 $("#gmBtn").onclick = gmOpen;
+
+/* ---------- карта мира ---------- */
+const WLAND = [
+  [-168,66,-162,70,-141,70,-125,70,-110,73,-95,72,-85,70,-80,63,-94,59,-88,56,-78,55,-78,62,-70,60,-62,57,-56,52,-66,45,-70,42,-76,35,-81,31,-80,25,-83,29,-90,30,-97,27,-98,19,-92,18,-88,21,-87,15,-83,10,-78,8,-80,7,-86,11,-92,14,-105,20,-110,27,-115,30,-110,23,-117,32,-124,40,-124,48,-135,58,-148,60,-158,57,-166,62],
+  [-55,60,-44,60,-20,70,-20,82,-45,83,-70,80,-60,70],[-80,63,-62,67,-70,72,-85,70],[-85,22,-74,20,-78,22],
+  [-78,8,-72,12,-62,10,-52,5,-50,0,-35,-5,-39,-15,-41,-22,-48,-26,-58,-35,-65,-41,-66,-47,-69,-52,-72,-54,-74,-48,-73,-37,-71,-20,-76,-14,-81,-5,-80,0,-78,3],
+  [-9,37,-9,43,-1,46,-4,48,2,51,8,54,10,56,14,54,21,55,24,58,30,60,34,66,42,67,60,69,70,73,80,73,100,77,112,74,130,71,142,72,160,70,170,70,180,68,180,65,165,60,160,54,156,51,155,59,142,59,135,54,141,52,140,46,131,43,129,36,126,35,126,38,122,40,118,39,121,31,122,29,117,23,108,21,106,18,109,12,105,9,102,13,100,14,100,8,103,1,98,8,98,16,94,17,92,22,88,22,80,15,78,8,73,17,72,22,67,24,62,25,57,26,56,27,52,28,48,30,50,26,56,24,59,23,55,17,44,13,43,16,39,22,35,28,34,31,36,36,30,37,27,37,26,40,29,41,41,41,41,43,28,45,24,45,20,41,19,42,13,45,16,42,18,40,16,38,12,42,9,44,3,43,0,39,-2,37],
+  [5,59,5,62,14,68,22,70,30,70,28,67,26,65,22,64,18,60,12,56,10,59],
+  [-17,21,-13,28,-6,36,10,37,11,33,20,32,32,31,35,28,43,12,51,12,48,5,41,-3,39,-9,41,-15,35,-24,32,-29,26,-34,19,-34,15,-27,12,-17,13,-6,9,4,-8,4,-14,10,-17,15],
+  [44,-25,47,-25,50,-15,49,-12,44,-17],[-10,52,-6,58,-3,59,2,53,1,51,-5,50],[-24,64,-14,64,-14,66,-22,66],
+  [130,31,135,34,140,36,142,40,141,45,145,44,140,41,136,37,132,35],[95,5,98,4,106,-6,102,-4,96,2],[109,1,117,7,119,1,116,-4,110,-3],[105,-6,114,-8,106,-8],[131,-1,141,-3,150,-10,141,-9,135,-4],
+  [114,-22,122,-18,130,-12,136,-12,142,-11,146,-19,153,-27,150,-37,142,-38,135,-35,130,-32,116,-35,114,-26],[172,-34,178,-38,175,-41,172,-41],[167,-46,174,-41,171,-45],[120,18,122,18,126,8,122,7,120,14]
+];
+const CNP = { US:[39,-98],CA:[56,-106],MX:[23,-102],BR:[-10,-52],AR:[-34,-64],CL:[-33,-71],CO:[4,-73],PE:[-9,-75],VE:[7,-66],CU:[22,-79],UY:[-33,-56],EC:[-2,-78],BO:[-17,-65],PY:[-23,-58],CR:[10,-84],PA:[9,-80],DO:[19,-70],JM:[18,-77],
+  GB:[54,-2],IE:[53,-8],FR:[46,2],DE:[51,10],ES:[40,-4],PT:[39,-8],IT:[42,12],NL:[52,5],BE:[50.5,4.5],CH:[47,8],AT:[47.5,14],LU:[49.8,6.1],SE:[62,15],NO:[61,9],FI:[64,26],DK:[56,10],IS:[65,-18],PL:[52,19],CZ:[49.8,15.5],SK:[48.7,19.5],HU:[47,19],RO:[46,25],BG:[42.7,25],GR:[39,22],UA:[49,32],BY:[53.7,28],RU:[60,70],EE:[59,25],LV:[57,25],LT:[55,24],RS:[44,21],HR:[45,16],SI:[46,14.8],GE:[42,43],AM:[40,45],AZ:[40.5,47.5],CY:[35,33],MT:[35.9,14.4],
+  TR:[39,35],IL:[31,35],LB:[33.9,35.9],JO:[31,36],IQ:[33,44],IR:[32,53],SA:[24,45],AE:[24,54],QA:[25.3,51.2],EG:[26,30],MA:[32,-6],DZ:[28,3],TN:[34,9],NG:[9,8],GH:[8,-1],SN:[14,-14],KE:[0,38],ET:[9,40],ZA:[-29,24],
+  IN:[22,79],PK:[30,69],BD:[24,90],LK:[7.9,80.7],NP:[28,84],AF:[33,65],KZ:[48,68],UZ:[41,64],MN:[47,105],CN:[35,103],HK:[22.3,114.2],TW:[23.7,121],JP:[36,138],KR:[36,128],TH:[15,101],VN:[16,107],MM:[21,96],KH:[12.5,105],LA:[18,103],MY:[4,102],SG:[1.3,103.8],ID:[-2,118],PH:[12,122],AU:[-25,134],NZ:[-41,174] };
+const cnLS = () => { try { return JSON.parse(localStorage.getItem("cnc") || "{}"); } catch (e) { return {}; } };
+let cnC = cnLS(), cnRun = false, mapSel = "", mapDots = null, mapB = [];
+const cnKey = m => (m.media_type || "movie") + ":" + m.tmdb_id;
+function cnAgg() { const A = {}; movies.filter(m => m.status === "watched").forEach(m => (cnC[cnKey(m)] || []).forEach(c => (A[c] = A[c] || []).push(m))); return A; }
+const cnCount = () => Object.keys(cnAgg()).length;
+const cnName = cc => { try { return new Intl.DisplayNames(["ru"], { type: "region" }).of(cc) || cc; } catch (e) { return cc; } };
+function inPoly(p, x, y) { let c = false; for (let i = 0, j = p.length - 2; i < p.length; j = i, i += 2) { if ((p[i + 1] > y) !== (p[j + 1] > y) && x < (p[j] - p[i]) * (y - p[i + 1]) / (p[j + 1] - p[i + 1]) + p[i]) c = !c; } return c; }
+async function cnLoad() {
+  if (cnRun) return; const todo = movies.filter(m => m.status === "watched" && !cnC[cnKey(m)]); if (!todo.length) return; cnRun = true; let k = 0, n = 0;
+  const save = () => { try { localStorage.setItem("cnc", JSON.stringify(cnC)); } catch (e) {} };
+  const w = async () => { while (k < todo.length) { const m = todo[k++]; try { const d = await tmdbGet(`${m.media_type || "movie"}/${m.tmdb_id}`); if (d) { const c = (d.production_countries || []).map(x => x.iso_3166_1).filter(Boolean); cnC[cnKey(m)] = c.length ? c : (d.origin_country || []); if (++n % 8 === 0) { save(); mapDraw(); } } } catch (e) {} } };
+  await Promise.all([w(), w(), w(), w()]); save(); cnRun = false; mapDraw(); try { achCheck(); } catch (e) {}
+}
+const mapTab = () => `<div class="pf-sec" style="margin-top:16px"><div class="map-w"><canvas id="mapC" width="720" height="284" role="img" aria-label="Карта стран просмотренных фильмов"></canvas></div><div class="meta" id="mapSt"></div><div id="mapL"></div></div>`;
+function mapBind() {
+  const c = $("#mapC"); if (!c) return;
+  c.onclick = e => { const r = c.getBoundingClientRect(), x = (e.clientX - r.left) * c.width / r.width, y = (e.clientY - r.top) * c.height / r.height; let b = null, d = 1e9;
+    mapB.forEach(o => { const q = Math.hypot(o.px - x, o.py - y); if (q < Math.max(o.r * 1.6, 14) && q < d) { d = q; b = o; } }); mapSel = b ? (b.cc === mapSel ? "" : b.cc) : ""; mapDraw(); };
+  $("#mapL").onclick = e => { const f = e.target.closest("[data-mf]"), r = e.target.closest("[data-cc]");
+    if (f) openMovie(+f.dataset.mf, f.dataset.mt); else if (r) { mapSel = r.dataset.cc === mapSel ? "" : r.dataset.cc; mapDraw(); } };
+  mapDraw(); cnLoad();
+}
+function mapDraw() {
+  const c = $("#mapC"); if (!c) return; const x = c.getContext("2d"), W = c.width, H = c.height, cs = getComputedStyle(document.documentElement), mut = cs.getPropertyValue("--mut").trim() || "#888", acc = cs.getPropertyValue("--acc").trim() || "#f5b041";
+  if (!mapDots) { mapDots = []; for (let py = 3; py < H; py += 6) for (let px = 3; px < W; px += 6) { const lo = px / W * 360 - 180, la = 84 - py / H * 142; if (WLAND.some(p => inPoly(p, lo, la))) mapDots.push([px, py]); } }
+  x.clearRect(0, 0, W, H); x.fillStyle = mut; x.globalAlpha = .4; mapDots.forEach(d => { x.beginPath(); x.arc(d[0], d[1], 1.6, 0, 7); x.fill(); }); x.globalAlpha = 1;
+  const A = cnAgg(), ks = Object.keys(A).sort((a, b) => A[b].length - A[a].length); mapB = [];
+  ks.forEach(cc => { const p = CNP[cc]; if (!p) return; const px = (p[1] + 180) / 360 * W, py = (84 - p[0]) / 142 * H, r = 5 + Math.sqrt(A[cc].length) * 2.6;
+    mapB.push({ cc, px, py, r }); const g = x.createRadialGradient(px, py, 0, px, py, r * 2.2); g.addColorStop(0, acc); g.addColorStop(.35, acc + "99"); g.addColorStop(1, acc + "00");
+    x.fillStyle = g; x.beginPath(); x.arc(px, py, r * 2.2, 0, 7); x.fill(); x.fillStyle = acc; x.beginPath(); x.arc(px, py, r * .55, 0, 7); x.fill();
+    if (cc === mapSel) { x.strokeStyle = cs.getPropertyValue("--tx").trim() || "#fff"; x.lineWidth = 2; x.beginPath(); x.arc(px, py, r * .95, 0, 7); x.stroke(); } });
+  $("#mapSt").textContent = ks.length ? `Вы посмотрели кино из ${ks.length} ${ks.length % 10 === 1 && ks.length % 100 !== 11 ? "страны" : "стран"}` + (cnRun ? " · данные догружаются…" : "") : (cnRun ? "Загружаем страны ваших фильмов…" : "Пока нет данных о странах.");
+  const mx = ks.length ? A[ks[0]].length : 1;
+  $("#mapL").innerHTML = ks.slice(0, 10).map(cc => `<button class="map-r${cc === mapSel ? " on" : ""}" data-cc="${cc}"><span>${esc(cnName(cc))}</span><i style="width:${Math.max(6, Math.round(A[cc].length / mx * 100))}%"></i><b>${A[cc].length}</b></button>`).join("")
+    + (mapSel && A[mapSel] ? `<div class="map-f"><b>${esc(cnName(mapSel))}: фильмы</b>${A[mapSel].map(m => `<button data-mf="${m.tmdb_id}" data-mt="${m.media_type || "movie"}">${esc(m.title)}</button>`).join("")}</div>` : "");
+}
+
+/* ---------- игры с актёрами ---------- */
+async function gmCredits(P, n) {
+  const q = gmShuf(P).slice(0, n), out = [];
+  for (let i = 0; i < q.length; i += 4) await Promise.all(q.slice(i, i + 4).map(async m => { try { const d = await tmdbGet(`${m.media_type || "movie"}/${m.tmdb_id}/credits`); const c = ((d && d.cast) || []).filter(x => x.name).slice(0, 6); if (c.length >= 3) out.push({ m, c }); } catch (e) {} }));
+  return out;
+}
+const gmFail = () => { $("#gm").innerHTML = '<p>Не удалось загрузить данные TMDB. Проверьте соединение и попробуйте ещё раз.</p><button data-gm="back">В меню</button>'; };
+async function gmAct() {
+  const tok = gmRun, R = 5; let sc = 0, n = 0, qi = 0; $("#gm").innerHTML = '<p class="meta">Готовим вопросы…</p>';
+  const cr = await gmCredits(gmPool(), 12); if (tok !== gmRun) return;
+  const A = []; cr.forEach(x => x.c.slice(0, 3).forEach(a => { if (!A.find(y => y.id === a.id)) A.push({ id: a.id, name: a.name }); }));
+  if (A.length < 6) return gmFail(); const Q = gmShuf(A);
+  const next = async () => {
+    if (n >= R) return gmEnd("act", sc, R); let a, f = [];
+    while (qi < Q.length && f.length < 3) { a = Q[qi++]; try { const d = await tmdbGet(`person/${a.id}/movie_credits`); f = ((d && d.cast) || []).filter(x => x.poster_path && x.title).sort((p, q) => q.vote_count - p.vote_count).slice(0, 3); } catch (e) { f = []; } }
+    if (tok !== gmRun) return; if (f.length < 3) return n ? gmEnd("act", sc, R) : gmFail();
+    n++; const o = gmShuf(gmShuf(A.filter(z => z.id !== a.id)).slice(0, 3).concat(a));
+    $("#gm").innerHTML = `<p class="meta">Вопрос ${n} из ${R} · верно: ${sc}</p><p>В этих фильмах снимался один актёр. Кто он?</p><div class="gm-t">${f.map(z => `<div class="gm-fc"><img src="${IMG}${esc(z.poster_path)}" alt=""><b>${esc(z.title)}</b></div>`).join("")}</div><div class="gm-o" style="margin-top:12px">${o.map(z => `<button data-a="${esc(z.name)}">${esc(z.name)}</button>`).join("")}</div>`;
+    gmH = b => { gmH = null; const ok = b.dataset.a === a.name; if (ok) sc++; sfx(ok ? "ding" : "tick"); document.querySelectorAll("#gm .gm-o button").forEach(z => { z.disabled = true; if (z.dataset.a === a.name) z.classList.add("ok"); }); if (!ok) b.classList.add("bad"); gmLater(next, 1500); };
+  };
+  next();
+}
+async function gmCast() {
+  const tok = gmRun, R = 5; let sc = 0, n = 0; $("#gm").innerHTML = '<p class="meta">Готовим вопросы…</p>';
+  const Q = await gmCredits(gmPool(), 12); if (tok !== gmRun) return; if (Q.length < 5) return gmFail();
+  const next = () => {
+    if (n >= R) return gmEnd("cast", sc, R * 5); const q = Q[n++], o = gmOpts(q.m); let shown = 2;
+    const draw = () => { $("#gm").innerHTML = `<p class="meta">Вопрос ${n} из ${R} · верно: ${sc}</p><p>В фильме снимались:</p><div class="gm-names">${q.c.slice(0, shown).map(a => `<span>${esc(a.name)}</span>`).join("")}</div>${shown < q.c.length ? `<button data-a="more">Показать ещё актёра</button>` : ""}<p style="margin-top:12px">Что это за фильм? Очков за верный ответ: ${7 - shown}</p>${gmOptsHtml(o)}`; };
+    draw();
+    gmH = b => { if (b.dataset.a === "more") { shown++; draw(); return; } gmH = null; const ok = b.dataset.a === q.m.title; if (ok) sc += 7 - shown; sfx(ok ? "ding" : "tick"); gmMark(b, q.m); gmLater(next, 1500); };
+  };
+  next();
+}
 
 /* ---------- действия, закреплённые, редкость, достижения друзей ---------- */
 const actKey = () => "act:" + (userId || "guest");
@@ -2727,7 +2828,7 @@ async function pairVote(id) {
   if (a.error) { $("#voteBox").innerHTML = `<div class="nudge">Совместный выбор: выполните migration_v3.sql в Supabase и обновите страницу.</div>`; return; }
   const mv = Object.fromEntries((a.data || []).map(x => [x.mkey, x.vote])), fv = Object.fromEntries((b.data || []).map(x => [x.mkey, x.vote]));
   const both = cand.filter(x => mv[keyOf(x)] === 1 && fv[keyOf(x)] === 1), mt = x => x.media_type || "movie";
-  $("#voteBox").innerHTML = `<div class="sec"><div class="sec-h"><h3><span>Выбираем вдвоём<small>Отметьте «Хочу» или «Пас», друг делает то же у себя</small></span></h3></div>
+  $("#voteBox").innerHTML = `<div class="sec"><div class="sec-h"><h2><span>Выбираем вдвоём<small>Отметьте «Хочу» или «Пас», друг делает то же у себя</small></span></h></div>
     ${both.length ? `<div class="soon" style="margin-bottom:12px"><div class="soon-t"><b>Вам обоим подходит</b><div class="soon-l">${both.map(x => `<button class="soon-c" data-tid="${x.tmdb_id}" data-mt="${mt(x)}"><span>${esc(x.title)}</span></button>`).join("")}</div></div></div>` : ""}
     <div class="vote-g">${cand.map(x => { const k = keyOf(x), v = mv[k], w = fv[k]; return `<div class="vt"><button class="vt-p" data-tid="${x.tmdb_id}" data-mt="${mt(x)}"><img src="${IMG}${esc(x.poster)}" alt="${esc(x.title)}" loading="lazy" decoding="async"></button><div class="vt-n">${esc(x.title)}</div><div class="vt-b"><button data-vk="${k}" data-vv="1" class="${v === 1 ? "on" : ""}">Хочу</button><button data-vk="${k}" data-vv="-1" class="${v === -1 ? "on" : ""}">Пас</button></div><div class="meta">${w === undefined ? "друг ещё не выбрал" : w === 1 ? "друг: хочет" : "друг: пас"}</div></div>`; }).join("")}</div></div>`;
 }
@@ -2757,7 +2858,7 @@ function epVs(a, f, b) { // a: моя запись (или null), b: запис�
   return d === 0 ? { t: "на одной серии", c: "eq" } : d > 0 ? { t: "вы впереди на " + plN(d, "серию", "серии", "серий"), c: "up" } : { t: n + " впереди на " + plN(-d, "серию", "серии", "серий"), c: "dn" };
 }
 const epRowHtml = (x, mine, f, b) => { const v = epVs(mine, f, b); return `<button class="ep" data-tid="${x.tmdb_id}" data-mt="tv">${x.poster ? `<img src="${IMG}${esc(x.poster)}" alt="" loading="lazy" decoding="async">` : ""}<span class="ep-t"><b>${esc(x.title)}</b><small>Вы: ${mine ? esc(epState(mine)) : "нет в списке"} · ${esc(fName(f))}: ${esc(epState(b))}</small></span><em class="ep-b ${v.c}">${esc(v.t)}</em></button>`; };
-const tvSec = (t, sub, inner) => `<div class="sec"><div class="sec-h"><h3><span>${t}<small>${sub}</small></span></h3></div><div class="ep-l">${inner}</div></div>`;
+const tvSec = (t, sub, inner) => `<div class="sec"><div class="sec-h"><h2><span>${t}<small>${sub}</small></span></h></div><div class="ep-l">${inner}</div></div>`;
 function tvFriendsHtml() {
   const mine = new Map(movies.map(m => [keyOf(m), m])), rows = [], now = new Map();
   (friends || []).forEach(f => f.movies.filter(x => x.media_type === "tv").forEach(x => {
