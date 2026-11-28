@@ -775,7 +775,7 @@ html:has(#auth:not([hidden])),body:has(#auth:not([hidden])){overflow:hidden}
   <header>
     <div class="logo" id="logoHome" title="На главную" role="link" tabindex="0"><svg class="mk" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16"/><path d="M16 24.5V16h8.5M39.5 16H48v8.5M48 39.5V48h-8.5M24.5 48H16v-8.5"/><path class="pl" d="M28.2 24.8c0-1.4 1.5-2.2 2.7-1.5l10.8 7.2c1.1.8 1.1 2.3 0 3l-10.8 7.2c-1.2.8-2.7-.1-2.7-1.5z"/></svg><b>Поиск кадров</b></div>
     <div class="hr">
-    <button id="gmBtn" class="streak" type="button" aria-label="Игры" title="Игры">🎮</button>
+    <button id="gmBtn" class="gm-btn" type="button" aria-label="Игры" title="Игры"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9h12a4 4 0 0 1 3.9 4.9l-.7 3A2.5 2.5 0 0 1 16.6 18l-1.6-2H9l-1.6 2a2.5 2.5 0 0 1-4.6-1.1l-.7-3A4 4 0 0 1 6 9z"/><path d="M8 11.5v3M6.5 13h3M16 12.4h.01M18 14.2h.01"/></svg><span>Игры</span></button>
     <button id="streak" class="streak" type="button" hidden></button>
     <div class="me">
       <button id="meBtn" aria-label="Профиль" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg></button>
@@ -2469,7 +2469,7 @@ function gmPoster(mode) {
     if (i >= P.length) return gmEnd(mode, sc, P.length * 10);
     const m = P[i++], o = gmOpts(m), t0 = performance.now(); let done = false;
     $("#gm").innerHTML = `<p class="meta">Раунд ${i} из ${P.length} · очки: ${sc}. Чем раньше ответите, тем больше очков.</p><div class="gm-p"><img id="gmI" src="${IMG}${esc(m.poster)}" alt="" style="transform-origin:${20 + Math.random() * 60}% ${20 + Math.random() * 60}%"></div>${gmOptsHtml(o)}`;
-    const im = $("#gmI"), pr = () => Math.min(1, (performance.now() - t0) / 12000), ap = p => { if (mode === "blur") im.style.filter = `blur(${Math.round(30 * (1 - p))}px)`; else im.style.transform = `scale(${(5 - 4 * p).toFixed(2)})`; };
+    const im = $("#gmI"), pr = () => Math.min(1, (performance.now() - t0) / gmT()), ap = p => { if (mode === "blur") im.style.filter = `blur(${Math.round(30 * (1 - p))}px)`; else im.style.transform = `scale(${(5 - 4 * p).toFixed(2)})`; };
     ap(0); clearInterval(gmTm); gmTm = setInterval(() => ap(pr()), 100);
     gmH = b => { if (done) return; done = true; clearInterval(gmTm); const ok = b.dataset.a === m.title; if (ok) sc += Math.max(1, Math.round(10 * (1 - pr()))); sfx(ok ? "ding" : "tick"); ap(1); gmMark(b, m); gmLater(next, 1400); };
   };
@@ -2479,7 +2479,7 @@ function gmHL() {
   const P = gmPool().filter(m => +m.tmdb_rating); if (P.length < 4) return gmEnd("hl", 0);
   let sc = 0, a = gmShuf(P)[0];
   const next = () => {
-    let b, t = 0; do { b = gmShuf(P)[0]; } while ((b.tmdb_id === a.tmdb_id || Math.abs(a.tmdb_rating - b.tmdb_rating) < .2) && ++t < 50);
+    let b, t = 0; do { b = gmShuf(P)[0]; } while ((b.tmdb_id === a.tmdb_id || Math.abs(a.tmdb_rating - b.tmdb_rating) < gmHD()) && ++t < 50);
     $("#gm").innerHTML = `<p class="meta">Серия верных ответов: ${sc}</p><div class="gm-v"><div>${gmImg(a)}<b>${esc(a.title)}</b><span class="gm-r">★ ${(+a.tmdb_rating).toFixed(1)}</span></div><div>${gmImg(b)}<b>${esc(b.title)}</b><span class="gm-r" id="gmR">?</span></div></div><p>Рейтинг TMDB у правого фильма выше или ниже, чем у левого?</p><div class="gm-o"><button data-a="up">Выше</button><button data-a="dn">Ниже</button></div>`;
     gmH = el => { gmH = null; const ok = (+b.tmdb_rating > +a.tmdb_rating) === (el.dataset.a === "up"); $("#gmR").textContent = "★ " + (+b.tmdb_rating).toFixed(1); el.classList.add(ok ? "ok" : "bad"); sfx(ok ? "ding" : "tick");
       if (ok) { sc++; a = b; gmLater(next, 1200); } else gmLater(() => gmEnd("hl", sc), 1500); };
@@ -2625,14 +2625,14 @@ const gmFail = () => { $("#gm").innerHTML = '<p>Не удалось загруз
 async function gmAct() {
   const tok = gmRun, R = 5; let sc = 0, n = 0, qi = 0; $("#gm").innerHTML = '<p class="meta">Готовим вопросы…</p>';
   const cr = await gmCredits(gmPool(), 12); if (tok !== gmRun) return;
-  const A = []; cr.forEach(x => x.c.slice(0, 3).forEach(a => { if (!A.find(y => y.id === a.id)) A.push({ id: a.id, name: a.name }); }));
+  const A = []; cr.forEach(x => x.c.slice(0, 3).forEach(a => { if (!A.find(y => y.id === a.id)) A.push({ id: a.id, name: a.name, p: a.profile_path }); }));
   if (A.length < 6) return gmFail(); const Q = gmShuf(A);
   const next = async () => {
     if (n >= R) return gmEnd("act", sc, R); let a, f = [];
     while (qi < Q.length && f.length < 3) { a = Q[qi++]; try { const d = await tmdbGet(`person/${a.id}/movie_credits`); f = ((d && d.cast) || []).filter(x => x.poster_path && x.title).sort((p, q) => q.vote_count - p.vote_count).slice(0, 3); } catch (e) { f = []; } }
     if (tok !== gmRun) return; if (f.length < 3) return n ? gmEnd("act", sc, R) : gmFail();
     n++; const o = gmShuf(gmShuf(A.filter(z => z.id !== a.id)).slice(0, 3).concat(a));
-    $("#gm").innerHTML = `<p class="meta">Вопрос ${n} из ${R} · верно: ${sc}</p><p>В этих фильмах снимался один актёр. Кто он?</p><div class="gm-t">${f.map(z => `<div class="gm-fc"><img src="${IMG}${esc(z.poster_path)}" alt=""><b>${esc(z.title)}</b></div>`).join("")}</div><div class="gm-o" style="margin-top:12px">${o.map(z => `<button data-a="${esc(z.name)}">${esc(z.name)}</button>`).join("")}</div>`;
+    $("#gm").innerHTML = `<p class="meta">Вопрос ${n} из ${R} · верно: ${sc}</p><p>В этих фильмах снимался один актёр. Кто он?</p><div class="gm-t">${f.map(z => `<div class="gm-fc"><img src="${IMG}${esc(z.poster_path)}" alt=""><b>${esc(z.title)}</b></div>`).join("")}</div><div class="gm-o" style="margin-top:12px">${o.map(z => `<button class="gm-ph" data-a="${esc(z.name)}">${z.p ? `<img src="${IMG}${esc(z.p)}" alt="">` : ""}<span>${esc(z.name)}</span></button>`).join("")}</div>`;
     gmH = b => { gmH = null; const ok = b.dataset.a === a.name; if (ok) sc++; sfx(ok ? "ding" : "tick"); document.querySelectorAll("#gm .gm-o button").forEach(z => { z.disabled = true; if (z.dataset.a === a.name) z.classList.add("ok"); }); if (!ok) b.classList.add("bad"); gmLater(next, 1500); };
   };
   next();
@@ -2642,7 +2642,7 @@ async function gmCast() {
   const Q = await gmCredits(gmPool(), 12); if (tok !== gmRun) return; if (Q.length < 5) return gmFail();
   const next = () => {
     if (n >= R) return gmEnd("cast", sc, R * 5); const q = Q[n++], o = gmOpts(q.m); let shown = 2;
-    const draw = () => { $("#gm").innerHTML = `<p class="meta">Вопрос ${n} из ${R} · верно: ${sc}</p><p>В фильме снимались:</p><div class="gm-names">${q.c.slice(0, shown).map(a => `<span>${esc(a.name)}</span>`).join("")}</div>${shown < q.c.length ? `<button data-a="more">Показать ещё актёра</button>` : ""}<p style="margin-top:12px">Что это за фильм? Очков за верный ответ: ${7 - shown}</p>${gmOptsHtml(o)}`; };
+    const draw = () => { $("#gm").innerHTML = `<p class="meta">Вопрос ${n} из ${R} · верно: ${sc}</p><p>В фильме снимались:</p><div class="gm-names">${q.c.slice(0, shown).map(a => `<span class="gm-ac">${a.profile_path ? `<img src="${IMG}${esc(a.profile_path)}" alt="">` : "<i>👤</i>"}<b>${esc(a.name)}</b></span>`).join("")}</div>${shown < q.c.length ? `<button data-a="more">Показать ещё актёра</button>` : ""}<p style="margin-top:12px">Что это за фильм? Очков за верный ответ: ${7 - shown}</p>${gmOptsHtml(o)}`; };
     draw();
     gmH = b => { if (b.dataset.a === "more") { shown++; draw(); return; } gmH = null; const ok = b.dataset.a === q.m.title; if (ok) sc += 7 - shown; sfx(ok ? "ding" : "tick"); gmMark(b, q.m); gmLater(next, 1500); };
   };
@@ -2682,7 +2682,7 @@ function thOpen() {
   if (!o) {
     o = document.createElement("div"); o.id = "thm"; document.body.appendChild(o);
     const all = [["auto", "Как в системе", "#0b0b0f", "#f5b041"], ["dark", "Тёмная", "#0b0b0f", "#f5b041"], ["light", "Светлая", "#f2f2f5", "#9a5d08"]].concat(Object.keys(SKINS).map(k => [k, SKINS[k].n, SKINS[k].bg, SKINS[k].ac]));
-    o.innerHTML = `<div class="th-in" role="dialog" aria-label="Выбор темы"><button type="button" class="th-x" data-th="x" aria-label="Закрыть">✕</button><h3>Темы</h3><p class="meta">Двадцать два оформления. Фон анимированный, его можно выключить в меню профиля.</p><div class="th-g">${all.map(a => `<button type="button" class="th-c" data-th="${a[0]}"><i style="background:linear-gradient(135deg,${a[2]},${a[0] === "auto" ? "#f2f2f5" : (SKINS[a[0]] ? SKINS[a[0]].pa : a[2])});--c:${a[3]}"></i>${esc(a[1])}</button>`).join("")}</div></div>`;
+    o.innerHTML = `<div class="th-in" role="dialog" aria-label="Выбор темы"><button type="button" class="th-x" data-th="x" aria-label="Закрыть">✕</button><h3>Темы</h3><p class="meta">Восемнадцать оформлений. Фон анимированный, его можно выключить в меню профиля.</p><div class="th-g">${all.map(a => `<button type="button" class="th-c" data-th="${a[0]}"><i style="background:linear-gradient(135deg,${a[2]},${a[0] === "auto" ? "#f2f2f5" : (SKINS[a[0]] ? SKINS[a[0]].pa : a[2])});--c:${a[3]}"></i>${esc(a[1])}</button>`).join("")}</div></div>`;
     o.onclick = e => { const b = e.target.closest("[data-th]"); if (e.target === o || (b && b.dataset.th === "x")) { o.hidden = true; return; } if (b) setTheme(b.dataset.th); };
     document.addEventListener("keydown", e => { if (e.key === "Escape" && !o.hidden) o.hidden = true; });
   }
@@ -3708,7 +3708,7 @@ const _wd=whDone;whDone=function(m){_wd(m);boom()};
 setInterval(()=>{const o=$("#wheel");if(o&&!o.hidden&&!whSpin&&$("#whC"))whDraw()},300);
 /* карта */
 let mZ=1,mX=0,mY=0,tZ=1,tX=0,tY=0,mRaf=0,mHv=null,mDrag=null;const MW=1080,MH=470;
-const flag=cc=>/^[A-Z]{2}$/.test(cc)?String.fromCodePoint(...[...cc].map(c=>127397+c.charCodeAt())):"🌐";
+const flag=cc=>/^[A-Z]{2}$/.test(cc)?`<img class="fl" src="https://flagcdn.com/w40/${cc.toLowerCase()}.png" alt="" onerror="this.remove()">`:"🌐";
 mapTab=()=>{mapDots=null;mZ=tZ=1;mX=mY=tX=tY=0;return`<div class="pf-sec" style="margin-top:16px"><div class="mp-st" id="mapS"></div><div class="mp-w"><canvas id="mapC" width="${MW}" height="${MH}" role="img" aria-label="Карта стран просмотренных фильмов"></canvas><div class="mp-tip" id="mapT" hidden></div><div class="mp-ctl"><button data-z="1" aria-label="Приблизить">＋</button><button data-z="-1" aria-label="Отдалить">－</button><button data-z="0" aria-label="Сбросить">⟲</button></div></div><div class="meta" id="mapSt" style="margin-top:8px"></div><div id="mapL"></div></div>`};
 const mPt=(c,lo,la)=>[((lo+180)/360*MW-MW/2)*mZ+MW/2+mX,((84-la)/142*MH-MH/2)*mZ+MH/2+mY];
 function mapPick(e,c){const r=c.getBoundingClientRect(),x=(e.clientX-r.left)*MW/r.width,y=(e.clientY-r.top)*MH/r.height;let b=null,d=1e9;mapB.forEach(o=>{const q=Math.hypot(o.px-x,o.py-y);if(q<Math.max(o.r*1.5,16)&&q<d){d=q;b=o}});return{b,x,y,r}}
@@ -3734,11 +3734,11 @@ mapB.forEach((o,i)=>{const sel=o.cc===mapSel,hv=mHv&&mHv.cc===o.cc,r=o.r,g=x.cre
 const ph=((t/1800+i*.27)%1);x.strokeStyle=acc;x.globalAlpha=(1-ph)*.7;x.lineWidth=2;x.beginPath();x.arc(o.px,o.py,r*.5+ph*r*1.4,0,7);x.stroke();x.globalAlpha=1;
 x.fillStyle=hv||sel?"#fff":acc;x.shadowColor=acc;x.shadowBlur=14;x.beginPath();x.arc(o.px,o.py,r*(hv?.62:.5),0,7);x.fill();x.shadowBlur=0;
 if(sel){x.strokeStyle="#fff";x.lineWidth=2;x.beginPath();x.arc(o.px,o.py,r*.95,0,7);x.stroke()}
-if(i<4||sel||mZ>1.8){x.font="600 15px Manrope,sans-serif";x.textAlign="center";x.fillStyle="#fff";x.shadowColor="#000";x.shadowBlur=5;x.fillText(flag(o.cc)+" "+cnName(o.cc),o.px,o.py-r*.8-6);x.shadowBlur=0}})}
+if(i<4||sel||mZ>1.8){x.font="600 15px Manrope,sans-serif";x.textAlign="center";x.fillStyle="#fff";x.shadowColor="#000";x.shadowBlur=5;x.fillText(cnName(o.cc),o.px,o.py-r*.8-6);x.shadowBlur=0}})}
 function mapLoop(){if(!$("#mapC")){mRaf=0;return}mapFrame(performance.now());mRaf=requestAnimationFrame(mapLoop)}
 function mapDraw(){if(!$("#mapC"))return;const A=cnAgg(),ks=Object.keys(A).sort((a,b)=>A[b].length-A[a].length),tot=new Set(Object.values(A).flat().map(m=>m.tmdb_id)).size;
 $("#mapS").innerHTML=`<div><b>${ks.length}</b><small>стран</small></div><div><b>${tot}</b><small>фильмов с данными</small></div><div><b>${ks[0]?flag(ks[0]):"—"}</b><small>${ks[0]?esc(cnName(ks[0])):"любимая страна"}</small></div>`;
-$("#mapSt").textContent=ks.length?"Нажмите на светящуюся точку или строку: карта приблизится и покажет связи. Перетаскивайте и крутите колесо мыши для зума."+(cnRun?" Данные догружаются…":""):(cnRun?"Загружаем страны ваших фильмов…":"Пока нет данных о странах.");
+$("#mapSt").textContent=ks.length?"Нажмите на точку или строку: карта приблизится, а пунктирные линии покажут, из каких ещё стран у вас кино. Тяните карту мышью, колесо мыши меняет масштаб."+(cnRun?" Данные догружаются…":""):(cnRun?"Загружаем страны ваших фильмов…":"Пока нет данных о странах.");
 const m1=ks.length?A[ks[0]].length:1;
 $("#mapL").innerHTML=ks.slice(0,10).map(cc=>`<button class="map-r${cc===mapSel?" on":""}" data-cc="${cc}"><span>${flag(cc)} ${esc(cnName(cc))}</span><i style="width:${Math.max(6,Math.round(A[cc].length/m1*100))}%"></i><b>${A[cc].length}</b></button>`).join("")+(mapSel&&A[mapSel]?`<div class="map-f"><b>${flag(mapSel)} ${esc(cnName(mapSel))}: фильмы</b>${A[mapSel].map(m=>`<button data-mf="${m.tmdb_id}" data-mt="${m.media_type||"movie"}">${esc(m.title)}</button>`).join("")}</div>`:"");if(!mRaf)mapLoop()}
 /* игры: итог со звёздами и конфетти */
@@ -3753,10 +3753,10 @@ if(ty==="r"&&s.every(x=>+x.tmdb_rating)&&Math.abs(s[0].tmdb_rating-s[1].tmdb_rat
 if(ty==="n"&&new Set(s.map(x=>x.year)).size===4){const w=s.slice().sort((a,b)=>b.year-a.year)[0];return{q:"Какой из этих фильмов вышел позже всех?",a:w.title,o:s.map(x=>x.title)}}}return null};
 const next=()=>{if(i>=R)return gmEnd("quiz",sc,R*18);const q=mk();if(!q)return gmEnd("quiz",sc,i*18||1);i++;
 $("#gm").innerHTML=`<p class="meta">Вопрос ${i} из ${R} · очки: ${sc} · серия: ${st}🔥</p><div class="gm-bar"><i id="gmB"></i></div><h3 style="margin:6px 0 12px">${esc(q.q)}</h3><div class="gm-o">${q.o.map(x=>`<button data-a="${esc(x)}">${esc(x)}</button>`).join("")}</div>`;
-requestAnimationFrame(()=>requestAnimationFrame(()=>{const b=$("#gmB");if(b)b.style.width="0"}));const t0=performance.now();
+requestAnimationFrame(()=>requestAnimationFrame(()=>{const b=$("#gmB");if(b){b.style.transitionDuration=gmQ()/1000+"s";b.style.width="0"}}));const t0=performance.now();
 const fin=b=>{clearTimeout(gmTm);gmH=null;const ok=b&&b.dataset.a===q.a,bar=$("#gmB");if(bar){bar.style.transition="none";bar.style.width=bar.getBoundingClientRect().width+"px"}
-if(ok){sc+=10+Math.round(5*Math.max(0,1-(performance.now()-t0)/15000))+Math.min(st,3);st++}else st=0;sfx(ok?"ding":"tick");document.querySelectorAll("#gm .gm-o button").forEach(z=>{z.disabled=true;if(z.dataset.a===q.a)z.classList.add("ok")});if(b&&!ok)b.classList.add("bad");gmLater(next,1300)};
-gmH=fin;gmTm=setTimeout(()=>{if(gmH)fin(null)},15000)};next()}
+if(ok){sc+=10+Math.round(5*Math.max(0,1-(performance.now()-t0)/gmQ()))+Math.min(st,3);st++}else st=0;sfx(ok?"ding":"tick");document.querySelectorAll("#gm .gm-o button").forEach(z=>{z.disabled=true;if(z.dataset.a===q.a)z.classList.add("ok")});if(b&&!ok)b.classList.add("bad");gmLater(next,1300)};
+gmH=fin;gmTm=setTimeout(()=>{if(gmH)fin(null)},gmQ())};next()}
 /* фильм дня */
 function gmDaily(){const P=gmPool().slice().sort((a,b)=>a.tmdb_id-b.tmdb_id);let h=0;for(const ch of today())h=(h*31+ch.charCodeAt(0))>>>0;const ans=P[h%P.length],T=[],MAX=6,gs=m=>(m.genres||"").split(", ").filter(Boolean);
 const ar=(a,b)=>+a==+b?"✓":+a<+b?"▲":"▼";
@@ -3850,6 +3850,121 @@ $("#tSw").onclick=async()=>{try{for(const r of await navigator.serviceWorker.get
 $("#tFps").onclick=()=>{msg("Считаю…");let n=0;const t0=performance.now();(function f(t){n++;if(t-t0<3000)requestAnimationFrame(f);else msg("FPS: "+Math.round(n/3)+" (тема: "+themeMode()+", фон "+(bgOn()?"вкл":"выкл")+")")})(t0)};
 $("#tSt").onclick=()=>{const g={};let tot=0;for(const k of Object.keys(localStorage)){const s=(k.length+(localStorage.getItem(k)||"").length)*2,n=k.startsWith("tm:")?"Кэш TMDB":k.startsWith("mvc:")?"Копия списка":k.startsWith("tvn:")||k==="cnc"?"Серии и страны":k.startsWith("ach:")||k.startsWith("act:")||k.startsWith("egg:")?"Достижения и пасхалки":"Прочее";g[n]=(g[n]||0)+s;tot+=s}$("#tOut").innerHTML=`<table class="adm-t">${Object.keys(g).map(k=>`<tr><td>${k}</td><td>${(g[k]/1024).toFixed(1)} КБ</td></tr>`).join("")}<tr><td><b>Всего</b></td><td>${(tot/1024).toFixed(1)} КБ</td></tr></table>`};
 $("#tCt").onclick=()=>{$("#tOut").innerHTML=admContrast()}}
+</script>
+<style id="v8css">
+@keyframes v8bg{0%{background-position:0% 0%,100% 100%,50% 50%}100%{background-position:100% 60%,0% 30%,50% 50%}}
+#games{background:radial-gradient(circle at 50% 20%,#2a1f5aee,#02020aee 75%)}
+.gm-in{position:relative;width:min(1100px,96vw)!important;height:min(900px,95vh)!important;background:radial-gradient(45% 35% at 15% 10%,color-mix(in srgb,var(--acc) 22%,transparent),transparent),radial-gradient(40% 35% at 90% 90%,#ff6a2a22,transparent),var(--paper)!important;background-size:160% 160%,160% 160%,auto!important;animation:v6in .35s cubic-bezier(.2,.9,.3,1.2),v8bg 18s ease-in-out infinite alternate}
+.gm-in>*{position:relative}
+#gm{display:flex!important;flex-direction:column;justify-content:center;padding:28px clamp(16px,4vw,48px)!important;font-size:1.08rem}
+#gm>p{font-size:1.05rem}#gm h3{font-size:clamp(1.3rem,3vw,1.9rem)}
+#gm .gm-t,#gm .gm-od{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:10px}
+#gm .gm-t button,#gm .gm-od button{padding:10px;font-size:.95rem;border-radius:16px}
+#gm .gm-t button:not(:disabled):hover,#gm .gm-od button:not(:disabled):hover{transform:translateY(-6px) scale(1.03);box-shadow:0 14px 34px #000a,0 0 0 2px var(--acc)}
+#gm .gm-v{gap:24px;max-width:640px;margin:0 auto 18px}
+#gm .gm-o{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}#gm .gm-o button{min-height:68px;font-size:1.08rem;border-radius:16px}
+#gm .gm-fc img{border-radius:14px}#gm .gm-fc{font-size:.95rem}
+#gm .gm-q{font-size:clamp(1.3rem,3.2vw,2rem);padding:18px 22px;margin:14px 0 22px}
+.gm-od button small{visibility:hidden}.gm-od button:disabled small{visibility:visible}
+.gm-end{padding-top:0!important}.gm-end h2{font-size:4.5rem!important}
+.gm-g{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important;gap:14px!important}.gm-c{padding:20px!important;min-height:150px}.gm-c b{font-size:1.1rem}
+.gm-hot{background:linear-gradient(90deg,#ff3d3d,#ff8a1f)!important;color:#fff!important;border:0!important;font-weight:800;box-shadow:0 8px 24px #ff4d1f66;transition:transform .15s,box-shadow .2s}.gm-hot:hover{transform:translateY(-2px);box-shadow:0 12px 30px #ff4d1f99}
+.gm-sg{display:flex!important;gap:12px;align-items:center;text-align:left;padding:8px 12px!important;border-radius:14px;width:100%;height:auto!important;min-height:0}.gm-sg img{width:44px;height:66px;object-fit:cover;border-radius:8px;flex:none}.gm-sg b{display:block}.gm-sg small{color:var(--mut)}.gm-sg:hover{box-shadow:0 0 0 2px #ff6a2a}
+#gmSg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px;max-height:300px;overflow:auto;margin:6px 0 10px;scrollbar-width:thin}
+.gm-dl{font-size:.9rem}.gm-dl span{padding:10px 6px}.gm-dl .bad{background:#ff4d1f30;border-color:#ff6a2a}
+#gm input#gmIn{font-size:1.1rem;padding:14px 16px;border-radius:14px}
+.th-in{width:min(1000px,96vw)!important;max-height:94vh!important;padding:26px!important}.th-in .th-g{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))!important;gap:16px!important}.th-in .th-c i{height:110px!important}
+.th-sec{margin:22px 0 10px;font-size:1.05rem;display:flex;align-items:center;gap:8px}.th-sec::after{content:"";flex:1;height:1px;background:var(--line)}
+.wh-in{width:min(560px,96vw)!important}.st-in{width:min(720px,96vw)!important}
+.fl{height:1em;width:auto;border-radius:3px;vertical-align:-.12em;margin-right:5px}.mp-st .fl{height:1.4rem}
+@media(max-width:640px){.gm-in,.th-in{width:100vw!important;height:100vh!important;max-height:100vh!important;border-radius:0!important}}
+</style>
+<script>
+function gmDaily2(){const P=gmPool().slice().sort((a,b)=>a.tmdb_id-b.tmdb_id);let h=0;for(const ch of today())h=(h*31+ch.charCodeAt(0))>>>0;const ans=P[h%P.length],T=[],MAX=6,gs=m=>(m.genres||"").split(", ").filter(Boolean),ar=(a,b)=>+a==+b?"✓":+a<+b?"▲":"▼",cl=(d,a,b)=>d<a?"ok":d<b?"p":"bad";let q="";
+const listH=()=>{const v=q.toLowerCase(),L=P.filter(m=>!T.includes(m)&&(!v||m.title.toLowerCase().includes(v))).slice(0,12);return L.map(m=>`<button type="button" class="gm-sg" data-a="p${m.tmdb_id}">${m.poster?`<img src="${IMG}${esc(m.poster)}" alt="">`:""}<span><b>${esc(m.title)}</b><small>${m.year}</small></span></button>`).join("")||'<p class="meta">Ничего не найдено</p>'};
+const rows=()=>T.map(m=>{const c=gs(m).filter(x=>gs(ans).includes(x)).length,n=gs(ans).length;return`<div><span>${esc(m.title)}</span><span class="${cl(Math.abs(m.year-ans.year),1,6)}">${m.year} ${ar(m.year,ans.year)}</span><span class="${cl(Math.abs(m.tmdb_rating-ans.tmdb_rating),.25,1)}">${(+m.tmdb_rating||0).toFixed(1)} ${ar(m.tmdb_rating,ans.tmdb_rating)}</span><span class="${cl(Math.abs(m.runtime-ans.runtime),6,20)}">${m.runtime||"?"} ${ar(m.runtime,ans.runtime)}</span><span class="${c==n&&c?"ok":c?"p":"bad"}">${c}/${n}</span></div>`}).join("");
+const draw=end=>{$("#gm").innerHTML=`<p class="meta">Попытка ${Math.min(T.length+1,MAX)} из ${MAX}. ▲ у загаданного больше, ▼ меньше. Зелёный точно, жёлтый близко, красный мимо.</p>${end?"":`<input id="gmIn" placeholder="Начните вводить название…" autocomplete="off" value="${esc(q)}"><div id="gmSg">${listH()}</div><button class="gm-hot" data-a="go" style="padding:14px;border-radius:14px">Угадать</button>`}<div class="gm-dl"><div style="font-weight:700"><span>Фильм</span><span>Год</span><span>★ TMDB</span><span>Минут</span><span>Жанры</span></div>${rows()}</div>`;const i=$("#gmIn");if(i){i.oninput=()=>{q=i.value;$("#gmSg").innerHTML=listH()};i.onkeydown=e=>{if(e.key==="Enter")go()};if(T.length)i.focus()}};
+const guess=m=>{if(!m||T.includes(m))return;T.push(m);sfx("ding");q="";const w=m===ans;if(w||T.length>=MAX){draw(true);gmH=null;setTimeout(()=>{if(!$("#games").hidden){gmEnd("daily",w?MAX+1-T.length:0,MAX);$("#gm .gm-end").insertAdjacentHTML("afterbegin",`<p>${w?"Угадали!":"Не угадали. Это был:"}</p><div style="width:130px;margin:0 auto">${gmImg(ans)}</div><b>${esc(ans.title)}</b>`)}},900)}else draw()};
+const go=()=>{const v=($("#gmIn").value||"").trim().toLowerCase(),L=P.filter(m=>!T.includes(m)&&m.title.toLowerCase().includes(v));const m=L.find(x=>x.title.toLowerCase()===v)||(L.length===1?L[0]:null);if(m)guess(m);else toast("Выберите фильм из списка")};
+gmH=b=>{const a=b.dataset.a;if(a==="go")go();else if(a[0]==="p")guess(P.find(m=>String(m.tmdb_id)===a.slice(1)))};draw()}
+GAMES.find(g=>g.k==="daily").run=gmDaily2;
+const _th=thOpen;thOpen=function(){const f=!$("#thm");_th();if(!f)return;const g=document.querySelector("#thm .th-g");if(!g)return;const cd=(id,n,bg,ac,pa)=>`<button type="button" class="th-c" data-th="${id}"><i style="background:linear-gradient(135deg,${bg},${pa});--c:${ac}"></i>${esc(n)}</button>`,K=Object.keys(SKINS),L=K.filter(k=>SKINS[k].b==="light"),D=K.filter(k=>SKINS[k].b==="dark");
+g.outerHTML=`<h4 class="th-sec">💻 Системная</h4><div class="th-g">${cd("auto","Как в системе","#0b0b0f","#f5b041","#f2f2f5")}</div><h4 class="th-sec">☀️ Светлые</h4><div class="th-g">${cd("light","Светлая","#f2f2f5","#9a5d08","#f2f2f5")}${L.map(k=>cd(k,SKINS[k].n,SKINS[k].bg,SKINS[k].ac,SKINS[k].pa)).join("")}</div><h4 class="th-sec">🌙 Тёмные</h4><div class="th-g">${cd("dark","Тёмная","#0b0b0f","#f5b041","#0b0b0f")}${D.map(k=>cd(k,SKINS[k].n,SKINS[k].bg,SKINS[k].ac,SKINS[k].pa)).join("")}</div>`;thMark()};
+</script>
+<style id="v9css">
+@keyframes v9p{0%{box-shadow:0 0 0 0 #ff6a2a88}100%{box-shadow:0 0 0 12px #ff6a2a00}}
+.gm-btn{display:inline-flex;align-items:center;gap:7px;height:36px;min-height:0;padding:0 15px 0 11px;border-radius:99px;border:0;font-weight:800;font-size:.86rem;color:#fff;background:linear-gradient(90deg,#ff3d3d,#ff8a1f);box-shadow:0 4px 16px #ff4d1f66;transition:transform .15s,filter .2s;animation:v9p 2.6s ease-out infinite}
+.gm-btn:hover{transform:translateY(-2px) scale(1.04);filter:brightness(1.1)}.gm-btn svg{width:21px;height:21px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.gm-btn.on{outline:2px solid var(--tx);outline-offset:2px;animation:none}
+@media(max-width:640px){.gm-btn span{display:none}.gm-btn{padding:0 10px}}
+@media(prefers-reduced-motion:reduce){.gm-btn{animation:none}}
+#gamesView .find-hd{margin-bottom:14px}
+#games.pg{position:static!important;inset:auto!important;display:block!important;background:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;z-index:auto!important}
+#games.pg[hidden]{display:none!important}
+#games.pg .gm-in{width:100%!important;max-width:1240px;height:auto!important;min-height:calc(100vh - 190px);margin:0 auto;border-radius:28px!important;overflow:hidden}
+#games.pg #gm{overflow:visible;min-height:calc(100vh - 290px)}
+@media(max-width:640px){#games.pg .gm-in{border-radius:20px!important;min-height:calc(100vh - 200px)}}
+.gm-lock{display:grid;gap:8px;justify-items:center;text-align:center;padding:40px 16px;border:1px dashed var(--line);border-radius:20px;color:var(--mut)}
+</style>
+<script>
+VIEWS.games="gamesView";{const g=document.createElement("div");g.id="gamesView";g.hidden=true;$("#searchView").after(g)}
+let gmFresh=false;
+function gmPage(){const v=$("#gamesView");if(!v.dataset.i){v.dataset.i=1;v.innerHTML='<div class="find-hd"><h2>🎮 Игры</h2><p>Играем на фильмах из вашего списка. Рекорды хранятся на этом устройстве.</p></div><div id="gmHost"></div>'}
+const host=$("#gmHost");if(gmPool().length<8){host.innerHTML='<div class="gm-lock"><b style="font-size:1.2rem">Нужно больше фильмов</b><span>Для игр нужно хотя бы 8 фильмов с постерами в списке. Добавьте ещё, и игры откроются.</span><button class="main" data-t-go="home">На главную</button></div>';host.onclick=e=>{if(e.target.closest("[data-t-go]"))go("home")};return}
+let o=$("#games");if(!o||!o.classList.contains("pg")){if(o)o.remove();gmOpen();o=$("#games");o.classList.add("pg");host.innerHTML="";host.appendChild(o);
+o.addEventListener("click",e=>{if(e.target===o){e.stopImmediatePropagation();return}const x=e.target.closest('[data-gm="x"]');if(x){e.stopImmediatePropagation();go("home")}},true);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&tab==="games"&&!document.querySelector("dialog[open]")){e.stopImmediatePropagation();go("home")}},true)}else{o.hidden=false;gmMenu()}
+const t=$("#gmT");if(t)t.textContent="Выберите игру"}
+const _rn=render;render=function(){if(tab==="games"){syncView();streakUpd();if(gmFresh||!$("#games")||!$("#games").classList.contains("pg")){gmFresh=false;gmPage()}return}_rn()};
+const _go9=go;go=function(t){if(tab==="games"&&t!=="games")gmStop();if(t==="games"&&tab!=="games")gmFresh=true;_go9(t);$("#gmBtn").classList.toggle("on",t==="games");if(t==="games")window.scrollTo(0,0)};
+$("#gmBtn").onclick=()=>go("games");
+</script>
+<style id="v10css">
+@keyframes v10h{from{opacity:.55;transform:scaleY(.9)}to{opacity:1;transform:scaleY(1.12)}}
+[data-skin=lava] #tbg{background:linear-gradient(#0b0405,#1a0707 65%,#2e0c07)}[data-skin=lava] #tbg::before{left:0;right:0;bottom:-10%;height:46%;background:radial-gradient(60% 100% at 50% 100%,#ff5a1faa,#ff2a0033 55%,transparent);transform-origin:50% 100%;animation:v10h 5s ease-in-out infinite alternate}[data-skin=lava] #tbg::after{display:none}
+[data-skin=paper] #tbg{background:#f4efe6 repeating-linear-gradient(90deg,transparent 0 calc(33.33vw - 1px),#1a1a1a18 calc(33.33vw - 1px) 33.33vw)}
+.gm-lv{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px}.gm-lv button{min-height:40px;padding:8px 18px;border-radius:99px;font-weight:700;border:2px solid var(--line);background:var(--glass);color:var(--tx)}
+.gm-lv button[data-lv="1"].on{background:#2fbf71;border-color:#2fbf71;color:#04210f}.gm-lv button[data-lv="2"].on{background:#f5b041;border-color:#f5b041;color:#2a1a00}.gm-lv button[data-lv="3"].on{background:linear-gradient(90deg,#ff3d3d,#ff8a1f);border-color:#ff5a2a;color:#fff}.gm-lv small{color:var(--mut);flex-basis:100%}
+.gm-names{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0}.gm-ac{display:grid;justify-items:center;gap:6px;width:120px;text-align:center}.gm-ac img,.gm-ac i{width:120px;height:170px;object-fit:cover;border-radius:16px;box-shadow:0 8px 22px #0008;display:grid;place-items:center;background:var(--field);font-style:normal;font-size:2.5rem}.gm-ac b{font-size:.88rem}
+.gm-ph{display:grid!important;justify-items:center;gap:8px;padding:10px!important;height:auto!important}.gm-ph img{width:100%;max-width:150px;aspect-ratio:2/3;object-fit:cover;border-radius:14px}
+#gm .gm-o:has(.gm-ph){grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+</style>
+<script>
+/* подход 3: темы с характером */
+["sakura","candy","desert","forest","midnight","gold"].forEach(k=>delete SKINS[k]);
+{const a=["#f4efe6","#fffdf8","#5c5346","#cfc5b0","#1a1a1a","#fbf7ee","#b3261e","#ffffff"];SKINS.paper={n:"Газета",b:"light",v:`--bg:${a[0]};--paper:${a[1]};--mut:${a[2]};--line:${a[3]};--tx:${a[4]};--field:${a[5]};--glass:#1a1a1a0d;--acc:${a[6]};--on-acc:${a[7]}`,bg:a[0],ac:a[6],pa:a[1]}}
+{const _k=document.documentElement;}
+FX.lava={n:50,lt:1,mk:(W,H)=>({x:R(W),y:H+R(40),v:30+R(60),s:1+R(2.2),p:R(6),a:.4+R(.6)}),up:(p,dt,W,H)=>{p.y-=p.v*dt;p.x+=Math.sin(p.y/40+p.p)*20*dt;if(p.y<-10){p.y=H+10;p.x=R(W)}},dr:(x,p)=>{x.fillStyle=`rgba(255,${120+p.s*30|0},40,${p.a})`;x.shadowColor="#ff6a1f";x.shadowBlur=8;x.beginPath();x.arc(p.x,p.y,p.s,0,7);x.fill();x.shadowBlur=0}};
+const CARD=".card,.tile,.panel,.stat,.ach-teaser,.gm-c,.fr-row,.ep,.adm-card",NB=":not(#meBtn,.sw,.gm-btn,.th-x,.wh-x,.mp-ctl button,.st-h button,.gm-h button,.streak)";
+const TH={paper:{fb:"'Source Serif 4',Georgia,serif",fh:"'Playfair Display',Georgia,serif",cr:"2px",br:"2px",card:"border:1px solid #1a1a1a;box-shadow:none;outline:1px solid #1a1a1a33;outline-offset:-5px",hd:"font-style:italic"},
+mint:{fb:"Fredoka,Manrope,sans-serif",cr:"30px",br:"99px",card:"border:0;box-shadow:0 12px 30px #0a7a5524"},
+ice:{fb:"'Space Grotesk',Manrope,sans-serif",cr:"22px",br:"14px",card:"background:#ffffff8c!important;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid #fff;box-shadow:0 10px 36px #5aa0e033"},
+sunset:{fb:"'Space Grotesk',Manrope,sans-serif",cr:"6px",br:"6px",card:"border:2.5px solid #2a120a;box-shadow:5px 5px 0 #2a120a",btn:"border:2px solid #2a120a;box-shadow:3px 3px 0 #2a120a",hd:"font-weight:800"},
+neon:{fh:"Orbitron,Manrope,sans-serif",cr:"10px",br:"10px",card:"border:1px solid #ff4fd8aa;box-shadow:0 0 16px #ff4fd844,inset 0 0 14px #ff4fd814",hd:"text-shadow:0 0 12px #ff4fd8aa;letter-spacing:.04em"},
+ocean:{fb:"Quicksand,Manrope,sans-serif",cr:"24px",br:"99px",card:"background:#06384bb0!important;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid #2fd8c844"},
+space:{fh:"Sora,Manrope,sans-serif",cr:"14px",br:"12px",card:"border:1px solid #8a7dff44;box-shadow:0 0 24px #5a4dff1f"},
+matrix:{fb:"'JetBrains Mono',monospace",cr:"0",br:"0",card:"border:1px solid #1fa84a;background:#00140ad0!important;box-shadow:0 0 10px #1fa84a33",hd:"text-shadow:0 0 8px #3dff7a99"},
+noir:{fh:"Oswald,Manrope,sans-serif",cr:"0",br:"0",card:"border:1px solid #ffffff55;box-shadow:none",hd:"text-transform:uppercase;letter-spacing:.1em"},
+aurora:{fb:"Outfit,Manrope,sans-serif",cr:"24px",br:"99px",card:"border:1px solid #3dffb044;box-shadow:0 0 30px #3dffb01c,0 0 60px #8a5cff14"},
+cyber:{fb:"Rajdhani,Manrope,sans-serif",cr:"0",br:"0",card:"border:1px solid #fcee0a77;clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)",hd:"text-transform:uppercase;letter-spacing:.08em"},
+vhs:{fb:"'Space Mono',monospace",cr:"4px",br:"4px",card:"border:1px solid #00e5ff55;box-shadow:2px 0 #ff005055,-2px 0 #00e5ff55",hd:"text-shadow:2px 0 #ff0050aa,-2px 0 #00e5ffaa"},
+royal:{fb:"'Cormorant Garamond',Georgia,serif",cr:"4px",br:"4px",card:"border:1px solid #e2b94a77;outline:1px solid #e2b94a33;outline-offset:-5px;box-shadow:none",hd:"letter-spacing:.06em",fs:1},
+lava:{fh:"'Archivo Black',Manrope,sans-serif",cr:"10px",br:"10px",card:"border:1px solid #ff5a1f55;box-shadow:inset 0 -22px 34px -22px #ff5a1f66"},
+graphite:{cr:"8px",br:"8px",card:"border:1px solid #2f3237;box-shadow:none!important"}};
+{let c="";for(const id in TH){const o=TH[id],S=`html[data-skin=${id}]`;if(o.fb)c+=`${S} body,${S} :is(button,input,select,textarea){font-family:${o.fb}}`;if(o.fs)c+=`${S} body{font-size:1.12em}`;c+=`${S} :is(h1,h2,h3,h4,.logo){font-family:${o.fh||o.fb||"inherit"};${o.hd||""}}${S} :is(${CARD}){border-radius:${o.cr};${o.card}}${S} :is(button,input,select,textarea)${NB}{border-radius:${o.br}}`;if(o.btn)c+=`${S} button${NB}{${o.btn}}`;if(parseInt(o.cr)<=4)c+=`${S} :is(dialog,.th-in,.gm-in,.wh-in,.st-in){border-radius:${o.cr}!important}`}
+const st=document.createElement("style");st.id="v10th";st.textContent=c;document.head.appendChild(st)}
+let fl=0;const _at10=applyTheme;applyTheme=function(){_at10();if(!fl&&document.documentElement.dataset.skin){fl=1;const l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Source+Serif+4:wght@500&family=Fredoka:wght@500;600&family=Space+Grotesk:wght@500;700&family=Orbitron:wght@600&family=Quicksand:wght@600&family=Sora:wght@600&family=JetBrains+Mono:wght@500&family=Oswald:wght@500&family=Outfit:wght@500&family=Rajdhani:wght@600&family=Space+Mono&family=Cormorant+Garamond:wght@600;700&family=Archivo+Black&display=swap";document.head.appendChild(l)}};
+{const t=LS("th","auto");if(!["auto","dark","light"].includes(t)&&!SKINS[t])try{localStorage.removeItem("th")}catch(e){}}
+applyTheme();
+{const s=TOUR.find(x=>/Темы/.test(x.h));if(s)s.p="Меню человечка → «Тема»: "+(Object.keys(SKINS).length+3)+" оформлений, и у каждого свой характер: шрифты, формы, фон. «Настройки»: звук, масштаб, анимации, импорт и экспорт."}
+/* сложность игр */
+const gmLv=()=>+LS("gml","2")||2,gmT=()=>({1:20000,2:12000,3:7000})[gmLv()],gmQ=()=>({1:22000,2:15000,3:9000})[gmLv()],gmHD=()=>({1:.8,2:.2,3:.08})[gmLv()];
+const gmRaw=()=>{try{return JSON.parse(localStorage.getItem(gmKey())||"{}")}catch(e){return{}}};
+gmBest=function(k,v){const b=gmRaw(),kk=k+"|"+gmLv();if(v>(b[kk]||0)){b[kk]=v;LSS(gmKey(),JSON.stringify(b));return true}return false};
+gmGet=function(){const b=gmRaw(),r={};for(const k in b){const[a,l]=k.split("|");if(+(l||2)===gmLv())r[a]=b[k]}return r};
+gmOpts=function(m){return gmShuf(gmShuf(gmPool().filter(x=>x.title!==m.title)).slice(0,{1:2,2:3,3:5}[gmLv()]).concat(m))};
+const _gm10=gmMenu;gmMenu=function(){_gm10();const L=gmLv();$("#gm").insertAdjacentHTML("afterbegin",`<div class="gm-lv"><b>Сложность:</b>${[[1,"Лёгкая"],[2,"Средняя"],[3,"Сложная"]].map(a=>`<button type="button" data-lv="${a[0]}" class="${a[0]===L?"on":""}">${a[1]}</button>`).join("")}<small>Лёгкая: меньше вариантов и больше времени. Сложная: больше вариантов, меньше времени. Рекорды у каждого уровня свои.</small></div>`)};
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-lv]");if(b){LSS("gml",b.dataset.lv);gmMenu()}});
 </script>
 </body>
 </html>
