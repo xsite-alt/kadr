@@ -3654,5 +3654,116 @@ $("#bkFile").onchange = async e => {
 /* если вход завершился раньше, чем загрузился этот скрипт, откроем панель сейчас */
 try { admGate(); } catch (e) {}
 </script>
+<style id="v6css">
+/* v6: окна, колесо, карта, игры */
+@keyframes v6in{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}
+#thm,#games,#wheel{background:radial-gradient(circle at 50% 30%,#2a1f5acc,#000d 70%);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.th-in,.gm-in,.wh-in{animation:v6in .35s cubic-bezier(.2,.9,.3,1.2);border-radius:26px;border:1px solid color-mix(in srgb,var(--acc) 35%,var(--line));box-shadow:0 30px 80px #000a,0 0 60px color-mix(in srgb,var(--acc) 18%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--acc) 9%,var(--paper)),var(--paper) 40%)}
+.th-in h3,.gm-h h3,.wh-in h3{font-size:1.3rem;letter-spacing:.01em;background:linear-gradient(90deg,var(--tx),var(--acc));-webkit-background-clip:text;background-clip:text;color:transparent}
+.th-g{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.th-c{position:relative;padding:10px;border-radius:18px;transition:transform .2s,box-shadow .2s,border-color .2s}
+.th-c:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 12px 28px #0008,0 0 0 1px var(--c)}
+.th-c i{height:78px;border-radius:12px}
+.th-c i::before{content:"";position:absolute;left:8px;right:34px;top:10px;height:7px;border-radius:4px;background:#ffffff40;box-shadow:0 14px 0 #ffffff28,0 28px 0 #ffffff18}
+.th-c i::after{box-shadow:0 0 14px var(--c)}
+.th-c.on{border-color:var(--c)!important;box-shadow:0 0 0 2px var(--c),0 0 26px color-mix(in srgb,var(--c) 55%,transparent)}
+.th-c.on::after{content:"✓";position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:var(--c);color:#000;font-weight:800;display:grid;place-items:center;font-size:13px}
+.gm-c{transition:transform .2s,box-shadow .2s;border-radius:18px;position:relative;overflow:hidden}
+.gm-c:hover{transform:translateY(-3px);box-shadow:0 10px 26px #0007,0 0 0 1px var(--acc)}
+.gm-c i{font-size:2rem;filter:drop-shadow(0 0 10px var(--acc))}
+.gm-o button,.gm-od button,.gm-t button{transition:transform .15s,background .2s,box-shadow .2s}
+.gm-o button:not(:disabled):hover{transform:translateX(4px);box-shadow:0 0 0 1px var(--acc)}
+.gm-o button.ok,.gm-od button.ok,.gm-t button.ok{box-shadow:0 0 22px #3ddc84aa}.gm-o button.bad,.gm-od button.bad{animation:v6sh .4s}
+@keyframes v6sh{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.gm-bar{height:6px;border-radius:9px;background:var(--line);overflow:hidden;margin:8px 0 12px}.gm-bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#3ddc84,var(--acc),#ff5a5a);transition:width 15s linear}
+.gm-stars{font-size:2rem;letter-spacing:6px;margin:4px 0}.gm-stars b{color:var(--line)}.gm-stars b.on{color:#ffc83d;text-shadow:0 0 14px #ffc83d}
+.gm-dl{display:grid;gap:6px;margin:10px 0}.gm-dl div{display:grid;grid-template-columns:1.6fr repeat(4,1fr);gap:4px;font-size:.78rem;align-items:stretch}
+.gm-dl span{padding:6px 4px;border-radius:8px;background:var(--glass);text-align:center;border:1px solid var(--line)}.gm-dl .ok{background:#2fbf7140;border-color:#3ddc84}.gm-dl .p{background:#f5b04130;border-color:var(--acc)}
+.gm-in input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--field);color:var(--tx);margin:8px 0}
+.mp-st{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}.mp-st div{flex:1;min-width:90px;padding:10px 12px;border-radius:14px;background:var(--glass);border:1px solid var(--line)}.mp-st b{display:block;font-size:1.35rem;color:var(--acc)}.mp-st small{color:var(--mut)}
+.mp-w{position:relative;border-radius:22px;overflow:hidden;border:1px solid color-mix(in srgb,var(--acc) 30%,var(--line));background:radial-gradient(ellipse at 50% 40%,color-mix(in srgb,var(--acc) 14%,var(--paper)),var(--bg) 85%);box-shadow:inset 0 0 60px #0006}
+.mp-w canvas{display:block;width:100%;height:auto;touch-action:none;cursor:grab}.mp-w canvas:active{cursor:grabbing}
+.mp-tip{position:absolute;pointer-events:none;padding:8px 11px;border-radius:12px;background:#0b0b12ee;color:#fff;font-size:.8rem;border:1px solid var(--acc);transform:translate(-50%,-120%);white-space:nowrap;z-index:3}
+.mp-ctl{position:absolute;right:10px;bottom:10px;display:grid;gap:6px}.mp-ctl button{width:36px;height:36px;min-height:0;padding:0;border-radius:50%;background:#0b0b12cc;color:#fff;border:1px solid var(--line)}
+.map-r b{font-variant-numeric:tabular-nums}
+</style>
+<script>
+/* v6: переопределения (колесо, карта, игры) */
+function boom(){const c=document.createElement("canvas");c.style.cssText="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9500";c.width=innerWidth;c.height=innerHeight;document.body.appendChild(c);if(reduceMo()){setTimeout(()=>c.remove(),50);return}
+const x=c.getContext("2d"),cl=["#f5b041","#ff4fd8","#4fd8ff","#3ddc84","#fff","#a78bfa"],P=Array.from({length:110},()=>({x:innerWidth/2,y:innerHeight*.45,vx:(Math.random()-.5)*14,vy:-4-Math.random()*12,r:3+Math.random()*4,c:cl[Math.random()*6|0],a:Math.random()*6,s:(Math.random()-.5)*.4}));let t0=performance.now();
+(function f(n){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.a+=p.s;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r,-p.r/2,p.r*2,p.r);x.restore()});if(n-t0<2200)requestAnimationFrame(f);else c.remove()})(t0)}
+/* колесо */
+function whDraw(){const c=$("#whC"),x=c.getContext("2d"),n=whL.length,S=c.width,R=S/2,a0=2*Math.PI/n,rr=R-S*.055;x.clearRect(0,0,S,S);
+let g=x.createLinearGradient(0,0,S,S);g.addColorStop(0,"#ffe08a");g.addColorStop(.5,"#a8690f");g.addColorStop(1,"#ffe08a");x.beginPath();x.arc(R,R,R-2,0,7);x.fillStyle=g;x.fill();
+const tg=Math.floor(performance.now()/300)%2;for(let i=0;i<28;i++){const a=i/28*6.2832,on=(i+tg)%2;x.beginPath();x.arc(R+Math.cos(a)*(R-S*.027),R+Math.sin(a)*(R-S*.027),S*.011,0,7);x.fillStyle=on?"#fffbe6":"#6b400a";x.shadowColor="#ffd75e";x.shadowBlur=on?S*.03:0;x.fill();x.shadowBlur=0}
+x.save();x.translate(R,R);x.rotate(whA);
+whL.forEach((m,i)=>{let h=0;for(const ch of m.title)h=(h*31+ch.charCodeAt(0))%360;const q=x.createRadialGradient(0,0,S*.06,0,0,rr);q.addColorStop(0,`hsl(${h} 55% 18%)`);q.addColorStop(1,`hsl(${h} 65% ${i%2?36:46}%)`);
+x.beginPath();x.moveTo(0,0);x.arc(0,0,rr,i*a0,(i+1)*a0);x.closePath();x.fillStyle=q;x.fill();x.strokeStyle="#ffffff55";x.lineWidth=2;x.stroke();
+x.save();x.rotate(i*a0+a0/2);x.fillStyle="#fff";x.shadowColor="#000c";x.shadowBlur=6;x.font=`700 ${S/25}px Manrope,system-ui,sans-serif`;x.textAlign="right";x.textBaseline="middle";x.fillText(m.title.length>16?m.title.slice(0,15)+"…":m.title,rr-S*.04,0);x.restore()});
+x.restore();const h=x.createRadialGradient(R-8,R-8,2,R,R,S*.075);h.addColorStop(0,"#fff0b8");h.addColorStop(1,"#c27a0e");x.beginPath();x.arc(R,R,S*.07,0,7);x.fillStyle=h;x.shadowColor="#000a";x.shadowBlur=14;x.fill();x.shadowBlur=0;
+x.fillStyle="#1a1206";x.beginPath();x.moveTo(R-S*.014,R-S*.026);x.lineTo(R+S*.03,R);x.lineTo(R-S*.014,R+S*.026);x.fill()}
+const _wo=whOpen;whOpen=function(){_wo();const c=$("#whC");if(!c)return;c.width=c.height=760;c.style.cssText="width:100%;height:auto;filter:drop-shadow(0 12px 30px #000a)";whDraw()};$("#wheelBtn").onclick=whOpen;
+const _wd=whDone;whDone=function(m){_wd(m);boom()};
+setInterval(()=>{const o=$("#wheel");if(o&&!o.hidden&&!whSpin&&$("#whC"))whDraw()},300);
+/* карта */
+let mZ=1,mX=0,mY=0,tZ=1,tX=0,tY=0,mRaf=0,mHv=null,mDrag=null;const MW=1080,MH=470;
+const flag=cc=>/^[A-Z]{2}$/.test(cc)?String.fromCodePoint(...[...cc].map(c=>127397+c.charCodeAt())):"🌐";
+const mapTab=()=>{mapDots=null;mZ=tZ=1;mX=mY=tX=tY=0;return`<div class="pf-sec" style="margin-top:16px"><div class="mp-st" id="mapS"></div><div class="mp-w"><canvas id="mapC" width="${MW}" height="${MH}" role="img" aria-label="Карта стран просмотренных фильмов"></canvas><div class="mp-tip" id="mapT" hidden></div><div class="mp-ctl"><button data-z="1" aria-label="Приблизить">＋</button><button data-z="-1" aria-label="Отдалить">－</button><button data-z="0" aria-label="Сбросить">⟲</button></div></div><div class="meta" id="mapSt" style="margin-top:8px"></div><div id="mapL"></div></div>`};
+const mPt=(c,lo,la)=>[((lo+180)/360*MW-MW/2)*mZ+MW/2+mX,((84-la)/142*MH-MH/2)*mZ+MH/2+mY];
+function mapPick(e,c){const r=c.getBoundingClientRect(),x=(e.clientX-r.left)*MW/r.width,y=(e.clientY-r.top)*MH/r.height;let b=null,d=1e9;mapB.forEach(o=>{const q=Math.hypot(o.px-x,o.py-y);if(q<Math.max(o.r*1.5,16)&&q<d){d=q;b=o}});return{b,x,y,r}}
+function mapSelect(cc){mapSel=cc===mapSel?"":cc;if(mapSel&&CNP[mapSel]){const p=CNP[mapSel],bx=(p[1]+180)/360*MW,by=(84-p[0])/142*MH;tZ=2.6;tX=-(bx-MW/2)*tZ;tY=-(by-MH/2)*tZ}else{tZ=1;tX=tY=0}mapDraw()}
+function mapBind(){const c=$("#mapC");if(!c)return;
+c.onpointerdown=e=>{mDrag={x:e.clientX,y:e.clientY,mx:mX,my:mY,mv:0};c.setPointerCapture(e.pointerId)};
+c.onpointermove=e=>{const k=MW/c.getBoundingClientRect().width;if(mDrag){const dx=e.clientX-mDrag.x,dy=e.clientY-mDrag.y;mDrag.mv=Math.max(mDrag.mv,Math.hypot(dx,dy));if(mDrag.mv>4){mX=tX=mDrag.mx+dx*k;mY=tY=mDrag.my+dy*k}}
+const p=mapPick(e,c),t=$("#mapT");mHv=p.b;if(p.b&&!(mDrag&&mDrag.mv>4)){const A=cnAgg()[p.b.cc]||[];t.hidden=false;t.style.left=p.x/MW*100+"%";t.style.top=p.y/MH*100+"%";t.innerHTML=`${flag(p.b.cc)} <b>${esc(cnName(p.b.cc))}</b> · ${A.length}`}else t.hidden=true};
+c.onpointerup=e=>{if(mDrag&&mDrag.mv<=4){const p=mapPick(e,c);mapSelect(p.b?p.b.cc:"")}mDrag=null};c.onpointerleave=()=>{$("#mapT").hidden=true;mHv=null};
+c.onwheel=e=>{e.preventDefault();tZ=Math.min(8,Math.max(1,tZ*(e.deltaY<0?1.2:.83)));if(tZ===1)tX=tY=0};
+document.querySelector(".mp-ctl").onclick=e=>{const b=e.target.closest("[data-z]");if(!b)return;const z=+b.dataset.z;if(!z){tZ=1;tX=tY=0;mapSel=""}else tZ=Math.min(8,Math.max(1,tZ*(z>0?1.5:.66)));if(tZ===1)tX=tY=0;mapDraw()};
+$("#mapL").onclick=e=>{const f=e.target.closest("[data-mf]"),r=e.target.closest("[data-cc]");if(f)openMovie(+f.dataset.mf,f.dataset.mt);else if(r)mapSelect(r.dataset.cc)};
+mapDraw();cnLoad()}
+function mapFrame(t){const c=$("#mapC"),x=c.getContext("2d"),cs=getComputedStyle(document.documentElement),mut=cs.getPropertyValue("--mut").trim()||"#888",acc=cs.getPropertyValue("--acc").trim()||"#f5b041";
+if(!mapDots){mapDots=[];for(let py=3;py<MH;py+=6)for(let px=3;px<MW;px+=6){const lo=px/MW*360-180,la=84-py/MH*142;if(WLAND.some(p=>inPoly(p,lo,la)))mapDots.push([px,py])}}
+const k=reduceMo()?1:.14;mZ+=(tZ-mZ)*k;mX+=(tX-mX)*(mDrag?1:k);mY+=(tY-mY)*(mDrag?1:k);
+x.clearRect(0,0,MW,MH);x.strokeStyle=mut;x.globalAlpha=.1;x.lineWidth=1;for(let lo=-180;lo<=180;lo+=30){const a=mPt(c,lo,84),b=mPt(c,lo,-58);x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1]);x.stroke()}for(let la=-45;la<=75;la+=30){const a=mPt(c,-180,la),b=mPt(c,180,la);x.beginPath();x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1]);x.stroke()}
+x.globalAlpha=.42;x.fillStyle=mut;const ds=1.4*Math.sqrt(mZ);mapDots.forEach(d=>{const px=(d[0]-MW/2)*mZ+MW/2+mX,py=(d[1]-MH/2)*mZ+MH/2+mY;if(px<-4||px>MW+4||py<-4||py>MH+4)return;x.beginPath();x.arc(px,py,ds,0,7);x.fill()});x.globalAlpha=1;
+const A=cnAgg(),ks=Object.keys(A).sort((a,b)=>A[b].length-A[a].length);mapB=[];const mx=ks.length?A[ks[0]].length:1;
+ks.forEach(cc=>{const p=CNP[cc];if(!p)return;const q=mPt(c,p[1],p[0]);mapB.push({cc,px:q[0],py:q[1],r:(6+Math.sqrt(A[cc].length/mx)*20)*Math.sqrt(mZ)})});
+if(mapSel&&CNP[mapSel]){const s=mapB.find(o=>o.cc===mapSel);if(s)mapB.forEach(o=>{if(o===s)return;const mx2=(s.px+o.px)/2,my2=Math.min(s.py,o.py)-Math.hypot(s.px-o.px,s.py-o.py)*.25;x.strokeStyle=acc;x.globalAlpha=.5;x.lineWidth=1.4;x.setLineDash([6,6]);x.lineDashOffset=-t/60;x.beginPath();x.moveTo(s.px,s.py);x.quadraticCurveTo(mx2,my2,o.px,o.py);x.stroke()});x.setLineDash([]);x.globalAlpha=1}
+mapB.forEach((o,i)=>{const sel=o.cc===mapSel,hv=mHv&&mHv.cc===o.cc,r=o.r,g=x.createRadialGradient(o.px,o.py,0,o.px,o.py,r*2);g.addColorStop(0,acc);g.addColorStop(.4,acc+"88");g.addColorStop(1,acc+"00");x.fillStyle=g;x.beginPath();x.arc(o.px,o.py,r*2,0,7);x.fill();
+const ph=((t/1800+i*.27)%1);x.strokeStyle=acc;x.globalAlpha=(1-ph)*.7;x.lineWidth=2;x.beginPath();x.arc(o.px,o.py,r*.5+ph*r*1.4,0,7);x.stroke();x.globalAlpha=1;
+x.fillStyle=hv||sel?"#fff":acc;x.shadowColor=acc;x.shadowBlur=14;x.beginPath();x.arc(o.px,o.py,r*(hv?.62:.5),0,7);x.fill();x.shadowBlur=0;
+if(sel){x.strokeStyle="#fff";x.lineWidth=2;x.beginPath();x.arc(o.px,o.py,r*.95,0,7);x.stroke()}
+if(i<4||sel||mZ>1.8){x.font="600 15px Manrope,sans-serif";x.textAlign="center";x.fillStyle="#fff";x.shadowColor="#000";x.shadowBlur=5;x.fillText(flag(o.cc)+" "+cnName(o.cc),o.px,o.py-r*.8-6);x.shadowBlur=0}})}
+function mapLoop(){if(!$("#mapC")){mRaf=0;return}mapFrame(performance.now());mRaf=requestAnimationFrame(mapLoop)}
+function mapDraw(){if(!$("#mapC"))return;const A=cnAgg(),ks=Object.keys(A).sort((a,b)=>A[b].length-A[a].length),tot=new Set(Object.values(A).flat().map(m=>m.tmdb_id)).size;
+$("#mapS").innerHTML=`<div><b>${ks.length}</b><small>стран</small></div><div><b>${tot}</b><small>фильмов с данными</small></div><div><b>${ks[0]?flag(ks[0]):"—"}</b><small>${ks[0]?esc(cnName(ks[0])):"любимая страна"}</small></div>`;
+$("#mapSt").textContent=ks.length?"Нажмите на светящуюся точку или строку: карта приблизится и покажет связи. Перетаскивайте и крутите колесо мыши для зума."+(cnRun?" Данные догружаются…":""):(cnRun?"Загружаем страны ваших фильмов…":"Пока нет данных о странах.");
+const m1=ks.length?A[ks[0]].length:1;
+$("#mapL").innerHTML=ks.slice(0,10).map(cc=>`<button class="map-r${cc===mapSel?" on":""}" data-cc="${cc}"><span>${flag(cc)} ${esc(cnName(cc))}</span><i style="width:${Math.max(6,Math.round(A[cc].length/m1*100))}%"></i><b>${A[cc].length}</b></button>`).join("")+(mapSel&&A[mapSel]?`<div class="map-f"><b>${flag(mapSel)} ${esc(cnName(mapSel))}: фильмы</b>${A[mapSel].map(m=>`<button data-mf="${m.tmdb_id}" data-mt="${m.media_type||"movie"}">${esc(m.title)}</button>`).join("")}</div>`:"");if(!mRaf)mapLoop()}
+/* игры: итог со звёздами и конфетти */
+const _ge=gmEnd;gmEnd=function(k,sc,t){_ge(k,sc,t);const p=t?sc/t:(sc?.5:0),n=p>.8?3:p>.5?2:p>.2?1:0,h=document.querySelector("#gm .gm-end h2");if(h)h.insertAdjacentHTML("afterend",`<div class="gm-stars">${[0,1,2].map(i=>`<b class="${i<n?"on":""}">★</b>`).join("")}</div>`);if(n>=2)boom()};
+/* квиз */
+function gmQuiz(){const P=gmPool(),R=10,AG=[...new Set(P.flatMap(m=>(m.genres||"").split(", ").filter(Boolean)))];let i=0,sc=0,st=0;const pk=a=>gmShuf(a)[0];
+const mk=()=>{for(let t=0;t<40;t++){const ty=pk(["y","g","l","n","r"]),m=pk(P);
+if(ty==="y"){const ys=new Set([+m.year]);while(ys.size<4)ys.add(+m.year+pk([-9,-6,-4,-3,-2,-1,1,2,3,5,7]));return{q:`В каком году вышел «${m.title}»?`,a:String(m.year),o:gmShuf([...ys].map(String))}}
+if(ty==="g"){const g=(m.genres||"").split(", ").filter(Boolean);const bad=AG.filter(x=>!g.includes(x));if(!g.length||bad.length<3)continue;const a=pk(g);return{q:`Какой жанр у фильма «${m.title}»?`,a,o:gmShuf([a,...gmShuf(bad).slice(0,3)])}}
+const s=gmShuf(P).slice(0,ty==="n"?4:2);if(ty==="l"&&s.every(x=>+x.runtime)&&Math.abs(s[0].runtime-s[1].runtime)>=15){const w=s[0].runtime>s[1].runtime?s[0]:s[1];return{q:"Какой фильм длиннее?",a:w.title,o:s.map(x=>x.title)}}
+if(ty==="r"&&s.every(x=>+x.tmdb_rating)&&Math.abs(s[0].tmdb_rating-s[1].tmdb_rating)>=.3){const w=s[0].tmdb_rating>s[1].tmdb_rating?s[0]:s[1];return{q:"У какого фильма рейтинг TMDB выше?",a:w.title,o:s.map(x=>x.title)}}
+if(ty==="n"&&new Set(s.map(x=>x.year)).size===4){const w=s.slice().sort((a,b)=>b.year-a.year)[0];return{q:"Какой из этих фильмов вышел позже всех?",a:w.title,o:s.map(x=>x.title)}}}return null};
+const next=()=>{if(i>=R)return gmEnd("quiz",sc,R*18);const q=mk();if(!q)return gmEnd("quiz",sc,i*18||1);i++;
+$("#gm").innerHTML=`<p class="meta">Вопрос ${i} из ${R} · очки: ${sc} · серия: ${st}🔥</p><div class="gm-bar"><i id="gmB"></i></div><h3 style="margin:6px 0 12px">${esc(q.q)}</h3><div class="gm-o">${q.o.map(x=>`<button data-a="${esc(x)}">${esc(x)}</button>`).join("")}</div>`;
+requestAnimationFrame(()=>requestAnimationFrame(()=>{const b=$("#gmB");if(b)b.style.width="0"}));const t0=performance.now();
+const fin=b=>{clearTimeout(gmTm);gmH=null;const ok=b&&b.dataset.a===q.a,bar=$("#gmB");if(bar){bar.style.transition="none";bar.style.width=bar.getBoundingClientRect().width+"px"}
+if(ok){sc+=10+Math.round(5*Math.max(0,1-(performance.now()-t0)/15000))+Math.min(st,3);st++}else st=0;sfx(ok?"ding":"tick");document.querySelectorAll("#gm .gm-o button").forEach(z=>{z.disabled=true;if(z.dataset.a===q.a)z.classList.add("ok")});if(b&&!ok)b.classList.add("bad");gmLater(next,1300)};
+gmH=fin;gmTm=setTimeout(()=>{if(gmH)fin(null)},15000)};next()}
+/* фильм дня */
+function gmDaily(){const P=gmPool().slice().sort((a,b)=>a.tmdb_id-b.tmdb_id);let h=0;for(const ch of today())h=(h*31+ch.charCodeAt(0))>>>0;const ans=P[h%P.length],T=[],MAX=6,gs=m=>(m.genres||"").split(", ").filter(Boolean);
+const ar=(a,b)=>+a==+b?"✓":+a<+b?"▲":"▼";
+const draw=(end)=>{$("#gm").innerHTML=`<p class="meta">Фильм дня из вашего списка. Один и тот же сегодня, завтра будет новый. Попытка ${Math.min(T.length+1,MAX)} из ${MAX}. ▲ значит, что у загаданного значение больше.</p>${end?"":`<input id="gmIn" list="gmDl" placeholder="Название фильма из вашего списка" autocomplete="off"><datalist id="gmDl">${P.map(m=>`<option value="${esc(m.title)}">`).join("")}</datalist><button class="main" data-a="go">Угадать</button>`}<div class="gm-dl"><div style="font-weight:700"><span>Фильм</span><span>Год</span><span>★ TMDB</span><span>Минут</span><span>Жанры</span></div>${T.map(m=>{const c=gs(m).filter(x=>gs(ans).includes(x)).length;return`<div><span>${esc(m.title)}</span><span class="${m===ans||+m.year==+ans.year?"ok":""}">${m.year} ${ar(m.year,ans.year)}</span><span class="${Math.abs(m.tmdb_rating-ans.tmdb_rating)<.25?"ok":""}">${(+m.tmdb_rating||0).toFixed(1)} ${ar(m.tmdb_rating,ans.tmdb_rating)}</span><span class="${Math.abs(m.runtime-ans.runtime)<6?"ok":""}">${m.runtime||"?"} ${ar(m.runtime,ans.runtime)}</span><span class="${c==gs(ans).length&&c?"ok":c?"p":""}">${c}/${gs(ans).length}</span></div>`}).join("")}</div>`;const i=$("#gmIn");if(i)i.onkeydown=e=>{if(e.key==="Enter")go()}};
+const go=()=>{const v=($("#gmIn").value||"").trim().toLowerCase(),m=P.find(x=>x.title.toLowerCase()===v);if(!m)return toast("Выберите фильм из подсказок");if(T.includes(m))return toast("Этот уже был");T.push(m);sfx("ding");
+if(m===ans||T.length>=MAX){draw(true);const w=m===ans;gmH=null;setTimeout(()=>{if(!$("#games").hidden){gmEnd("daily",w?MAX+1-T.length:0,MAX);$("#gm .gm-end").insertAdjacentHTML("afterbegin",`<p>${w?"Угадали!":"Не угадали. Это был:"}</p><div style="width:110px;margin:0 auto">${gmImg(ans)}</div><b>${esc(ans.title)}</b>`)}},900)}else draw()};
+gmH=b=>{if(b.dataset.a==="go")go()};draw()}
+GAMES.push({k:"quiz",i:"🧠",n:"Киновикторина",d:"10 вопросов по вашему списку, таймер и серия",run:gmQuiz},{k:"daily",i:"📅",n:"Фильм дня",d:"как Wordle: 6 попыток и подсказки ▲▼",run:gmDaily});
+</script>
 </body>
 </html>
